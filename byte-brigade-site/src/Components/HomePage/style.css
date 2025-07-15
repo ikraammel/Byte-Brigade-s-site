@@ -1,0 +1,59 @@
+
+:root {
+  --violet: #6A1B9A;
+  --bleu: #1E88E5;
+  --blanc: #ffffff;
+}
+
+.homepage {
+  background: linear-gradient(to right, var(--violet), var(--bleu));
+  color: var(--blanc);
+  min-height: 100vh;
+  padding: 50px 20px;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.homepage h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.homepage p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.homepage ul {
+  list-style: none;
+  padding: 0;
+}
+
+.homepage li {
+  font-size: 1.1rem;
+  margin: 8px 0;
+}
+
+.homepage button {
+  background-color: var(--blanc);
+  color: var(--violet);
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-top: 30px;
+  transition: 0.3s ease;
+}
+
+.homepage button:hover {
+  background-color: var(--violet);
+  color: var(--blanc);
+  border: 1px solid var(--blanc);
+}
+.homepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
