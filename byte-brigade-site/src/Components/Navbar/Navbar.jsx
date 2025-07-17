@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
+  const [darkMode,setDarkMode] = useState(false)
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme")
+    if (savedTheme === "dark"){
+      setDarkMode(true)
+      document.body.classList.add("dark-mode")
+    }
+  },[darkMode])
+
+  const setTheme = () => {
+    setDarkMode(!darkMode)
+    localStorage.setItem("theme",!darkMode ? "dark"  : "light")
+  }
   return (
     <nav className="navbar navbar-expand-lg navbar-dark navbar-custom px-4">
       <Link className="navbar-brand" to="/">
@@ -25,22 +39,27 @@ export default function Navbar() {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ms-auto">
           <li className="nav-item">
-            <a className="nav-link" href="/cours">Cours</a>
+            <a className={`nav-link ${darkMode ? "dark-mode" : ""}`} href="/cours">Cours</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/activites">Activités</a>
+            <a className={`nav-link ${darkMode ? "dark-mode" : ""}`} href="/activites">Activités</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/membres">Nos membres du bureau</a>
+            <a className={`nav-link ${darkMode ? "dark-mode" : ""}`} href="/membres">Nos membres du bureau</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/login">Se connecter</a>
+            <a className={`nav-link ${darkMode ? "dark-mode" : ""}`} href="/login">Se connecter</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/register">S'inscrire</a>
+            <a className={`nav-link ${darkMode ? "dark-mode" : ""}`} href="/register">S'inscrire</a>
+          </li>
+          <li className="nav-item">
+            <button className="btn btn-secondary ms-3" onClick={setTheme}>
+              {darkMode ? "☀️ Mode clair" : "🌙 Mode sombre"}
+            </button>
           </li>
         </ul>
       </div>
     </nav>
-  );
+  );  
 }

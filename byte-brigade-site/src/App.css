@@ -28,3 +28,24 @@ body {
 .btn-custom:hover {
   background-color: #1565c0;
 }
+
+/* App.css */
+
+body.dark-mode {
+  background: linear-gradient(to right, #0f0f0f, #1a1a1a) !important;
+  color: #ffffff !important;
+}
+
+
+.navbar.dark-mode {
+  background-color: #1f1f1f !important;
+}
+
+.btn-custom.dark-mode {
+  background-color: #444;
+  color: white;
+}
+
+a.nav-link.dark-mode {
+  color: #ccc !important;
+}
