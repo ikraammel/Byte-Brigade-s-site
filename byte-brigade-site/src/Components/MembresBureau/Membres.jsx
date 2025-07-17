@@ -4,11 +4,28 @@ import CardMembre from './CardMembre'
 const membresData = {
   "2024-2025": [
     {
-      nom:' El houl',
-      prenom:'Ikram',
-      filiere: 'GIIA',
-      poste:"Présidente",
       photo:"ikram.jpg"
+    },
+    {
+      photo:"fati.jpg"
+    },
+    {
+      photo:"aya.jpg"
+    },
+    {
+      photo:"fatima.jpg"
+    },
+    {
+      photo:"anas.jpg"
+    },
+    {
+      photo:"ikram bel.jpg"
+    },
+    {
+      photo:"zineb.jpg"
+    },
+    {
+      photo:"touria.jpg"
     }
   ]
 }
@@ -28,13 +45,14 @@ function Membres(){
         ))}
       </select>
 
-      <div className="row justify-content-center gap-4">
+      <div className="row justify-content-center">
         {membresData[annee].map((m, i) => (
-          <div key={i} className="col-md-3">
-            <CardMembre {...m} />
-          </div>
+        <div key={i} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+          <CardMembre {...m} />
+        </div>
         ))}
       </div>
+
     </div>
   );
 }
