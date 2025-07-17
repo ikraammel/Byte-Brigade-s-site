@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../firebase'
 
 function Register() {
     const navigate = useNavigate()
 
     const [password,setPassword] = useState('')
     const [error,setError] = useState('')
+    const [email,setEmail] = useState('')
+    const [name,setName] = useState('')
+    const [prenom,setPrenom] = useState('')
 
     //Validation simple du mdp
     const validatePassword = (pwd) => {
@@ -16,16 +21,24 @@ function Register() {
         navigate('/login')
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
         if(!validatePassword(password)){
             setError('Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.')
             return 
         }
-        setError('')
-        alert('Inscription réussie !')
-        navigate('/login')
+        
+        try{
+            await createUserWithEmailAndPassword(auth,email,password);
+            alert('Inscription réussie !')
+            navigate('/login')
+        }catch(error){
+        console.error(error)
+        setError(error.message)
+        }
     }
+
+    
 
   return (
     <div>
@@ -35,17 +48,18 @@ function Register() {
 
         <div className="mb-3">
           <label className="form-label text-white">Nom</label>
-          <input type="text" className="form-control" placeholder="" />
+          <input type="text" className="form-control" placeholder="" value={name} onChange={e => setName(e.target.value)}/>
         </div>
 
         <div className="mb-3">
           <label className="form-label text-white">Prenom</label>
-          <input type="text" className="form-control" placeholder="" />
+          <input type="text" className="form-control" placeholder="" value={prenom} onChange={e => setPrenom(e.target.value)}/>
         </div>
 
         <div className="mb-3">
           <label className="form-label text-white">Email</label>
-          <input type="email" className="form-control" placeholder="exemple@ens.ma" />
+          <input type="email" className="form-control" placeholder="exemple@ens.ma" value={email} 
+          onChange={e => setEmail(e.target.value)}/>
         </div>
 
         <div className="mb-3">

@@ -1,18 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
 function Login() {
   const navigate = useNavigate()
+  const [email,setEmail] = useState('')
+  const [password,setPassword] = useState('')
+  const [error,setError] = useState('')
 
   const goToInscription = () => {
     navigate('/register')
   }
 
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = async (e) =>{
     e.preventDefault()
-    alert('Connexion réussie !')
-    navigate('/')
+    try{
+      await signInWithEmailAndPassword(auth,email,password)
+      alert('Connexion réussie !')
+      navigate('/')
+    }catch(error){
+      console.error(error)
+      setError('Email / mot de passe invalide')
+    }
+    
   }
   return (
     <div className="login-page d-flex justify-content-center align-items-center min-vh-100">
@@ -21,13 +33,16 @@ function Login() {
 
         <div className="mb-3">
           <label className="form-label text-white">Email</label>
-          <input type="email" className="form-control" placeholder="exemple@ens.ma" />
+          <input type="email" className="form-control" placeholder="exemple@ens.ma" value={email} 
+          onChange={e => setEmail(e.target.value)} />
         </div>
 
         <div className="mb-3">
           <label className="form-label text-white">Mot de passe</label>
-          <input type="password" className="form-control" placeholder="••••••••" />
+          <input type="password" className="form-control" placeholder="••••••••" value={password} 
+          onChange={e => setPassword(e.target.value)}/>
         </div>
+        {error && <div className='text-danger mt-2'>{error}</div>}
 
         <button type="submit" className="btn btn-custom w-100">Se connecter</button>
         <div className="text-center">
