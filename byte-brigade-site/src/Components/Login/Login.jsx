@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
+import LoginGoogle from './LoginGoogle';
 
 function Login() {
   const navigate = useNavigate()
@@ -45,6 +46,7 @@ function Login() {
         {error && <div className='text-danger mt-2'>{error}</div>}
 
         <button type="submit" className="btn btn-custom w-100">Se connecter</button>
+         <LoginGoogle/>
         <div className="text-center">
           <span className="text-white">Pas encore de compte ? </span>
           <button
