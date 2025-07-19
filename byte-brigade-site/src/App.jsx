@@ -6,6 +6,8 @@ import Navbar from './Components/Navbar/Navbar'
 import Login from './Components/Login/Login'
 import Membres from "./Components/MembresBureau/Membres";
 import Register from "./Components/Register/Register";
+import Admin from "./Components/Admin/Admin";
+import ListeCours from "./Components/ListeCours/ListeCours";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/membres" element={<Membres/>} />
+        <Route path="/admin" element={<Admin/>} />
+        <Route path="/cours" element={<ListeCours/>} />
       </Routes>
     </Router>
   )

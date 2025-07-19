@@ -1,32 +1,58 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import LoginGoogle from './LoginGoogle';
 
 function Login() {
-  const navigate = useNavigate()
-  const [email,setEmail] = useState('')
-  const [password,setPassword] = useState('')
-  const [error,setError] = useState('')
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const goToInscription = () => {
-    navigate('/register')
-  }
+    navigate('/register');
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
 
-  const handleSubmit = async (e) =>{
-    e.preventDefault()
-    try{
-      await signInWithEmailAndPassword(auth,email,password)
-      alert('Connexion réussie !')
-      navigate('/')
-    }catch(error){
-      console.error(error)
-      setError('Email / mot de passe invalide')
+    if (!email || !password) {
+      setError('Veuillez remplir tous les champs');
+      return;
     }
-    
-  }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const role = userData.role;
+        localStorage.setItem('userRole', role);
+        localStorage.setItem('userEmail', email);
+
+        if (role === 'admin') {
+          alert('Connexion réussie en tant qu\'admin');
+          navigate('/admin');
+        } else {
+          alert('Connexion réussie');
+          navigate('/cours');
+        }
+      } else {
+        setError("Aucun rôle défini pour cet utilisateur.");
+      }
+    } catch (error) {
+      console.error(error);
+      setError('Email ou mot de passe incorrect.');
+    }
+  };
+
   return (
     <div className="login-page d-flex justify-content-center align-items-center min-vh-100">
       <form onSubmit={handleSubmit} className="login-form p-4 rounded shadow">
@@ -34,26 +60,33 @@ function Login() {
 
         <div className="mb-3">
           <label className="form-label text-white">Email</label>
-          <input type="email" className="form-control" placeholder="exemple@ens.ma" value={email} 
-          onChange={e => setEmail(e.target.value)} />
+          <input
+            type="email"
+            className="form-control"
+            placeholder="exemple@ens.ma"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
 
         <div className="mb-3">
           <label className="form-label text-white">Mot de passe</label>
-          <input type="password" className="form-control" placeholder="••••••••" value={password} 
-          onChange={e => setPassword(e.target.value)}/>
+          <input
+            type="password"
+            className="form-control"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
-        {error && <div className='text-danger mt-2'>{error}</div>}
+
+        {error && <div className="text-danger mt-2">{error}</div>}
 
         <button type="submit" className="btn btn-custom w-100">Se connecter</button>
-         <LoginGoogle/>
-        <div className="text-center">
+        <LoginGoogle navigate={navigate} />
+        <div className="text-center mt-2">
           <span className="text-white">Pas encore de compte ? </span>
-          <button
-            type="button"
-            className="btn btn-link text-info p-0"
-            onClick={goToInscription}
-          >
+          <button type="button" className="btn btn-link text-info p-0" onClick={goToInscription}>
             S'inscrire
           </button>
         </div>
