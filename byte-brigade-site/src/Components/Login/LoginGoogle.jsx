@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { AuthContext } from '../AuthContext';
 
 function LoginGoogle() {
   const navigate = useNavigate();
+  const { setCurrentUser } = useContext(AuthContext); // récupère le setter du contexte
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -21,22 +23,28 @@ function LoginGoogle() {
         // Ajoute un rôle par défaut si premier login avec Google
         await setDoc(userDocRef, {
           email: user.email,
-          role: 'user', // ou 'admin' si c'est un admin, à changer manuellement dans Firestore
+          role: 'user', // À ajuster dans Firestore si besoin
           prenom: user.displayName?.split(' ')[0] || '',
           nom: user.displayName?.split(' ')[1] || '',
         });
       }
 
       const userData = (await getDoc(userDocRef)).data();
-      localStorage.setItem('userRole', userData.role);
-      localStorage.setItem('userEmail', user.email);
+
+      const userInfo = {
+        email: user.email,
+        role: userData.role,
+        nom: userData.nom,
+        prenom: userData.prenom,
+        displayName: user.displayName
+      };
+
+      localStorage.setItem('user', JSON.stringify(userInfo));
+      setCurrentUser(userInfo); // met à jour le contexte
 
       alert(`Bienvenue ${user.displayName}`);
-      if (userData.role === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/cours');
-      }
+      navigate(userData.role === 'admin' ? '/admin' : '/cours');
+
     } catch (error) {
       console.error('Erreur Google Auth :', error);
       alert('Erreur: ' + error.message);

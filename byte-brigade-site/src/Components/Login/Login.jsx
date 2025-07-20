@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import LoginGoogle from './LoginGoogle';
+import { AuthContext } from '../AuthContext';
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const { setCurrentUser } = useContext(AuthContext); // <- utilise setCurrentUser depuis le contexte
 
   const goToInscription = () => {
     navigate('/register');
@@ -34,8 +37,17 @@ function Login() {
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         const role = userData.role;
-        localStorage.setItem('userRole', role);
-        localStorage.setItem('userEmail', email);
+
+        const userInfo = {
+          email: email,
+          role: role,
+          nom: userData.nom,
+          prenom: userData.prenom,
+          displayName: `${userData.prenom} ${userData.nom}`
+        };
+
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        setCurrentUser(userInfo); // <- ici, on met à jour le contexte global
 
         if (role === 'admin') {
           alert('Connexion réussie en tant qu\'admin');
@@ -83,7 +95,12 @@ function Login() {
         {error && <div className="text-danger mt-2">{error}</div>}
 
         <button type="submit" className="btn btn-custom w-100">Se connecter</button>
+        <p className="mt-2">
+          <Link to="/reset-password">Mot de passe oublié ?</Link>
+        </p>
+
         <LoginGoogle navigate={navigate} />
+
         <div className="text-center mt-2">
           <span className="text-white">Pas encore de compte ? </span>
           <button type="button" className="btn btn-link text-info p-0" onClick={goToInscription}>

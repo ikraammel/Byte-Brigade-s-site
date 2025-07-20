@@ -7,7 +7,11 @@ import Login from './Components/Login/Login'
 import Membres from "./Components/MembresBureau/Membres";
 import Register from "./Components/Register/Register";
 import Admin from "./Components/Admin/Admin";
-import ListeCours from "./Components/ListeCours/ListeCours";
+import ConsulterCours from "./Components/ConsulterCours/ConsulterCours";
+import Profile from "./Components/Profile/Profile";
+import ProtectedRouteAdmin from "./Components/ProtectRoute/ProtectedRouteAdmin";
+import ProtectProfile from "./Components/ProtectRoute/ProtectProfile";
+import ResetPassword from "./Components/Login/ResetPassword";
 
 function App() {
   return (
@@ -18,8 +22,20 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/membres" element={<Membres/>} />
-        <Route path="/admin" element={<Admin/>} />
-        <Route path="/cours" element={<ListeCours/>} />
+        <Route path="/admin" element={
+                          <ProtectedRouteAdmin> 
+                            <Admin/>
+                          </ProtectedRouteAdmin>} />
+        <Route path="/cours" element={
+                            <ProtectProfile>
+                              <ConsulterCours />
+                            </ProtectProfile>
+                          } />
+        <Route path="/profile" element={
+                          <ProtectProfile> 
+                            <Profile/>
+                          </ProtectProfile>} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </Router>
   )

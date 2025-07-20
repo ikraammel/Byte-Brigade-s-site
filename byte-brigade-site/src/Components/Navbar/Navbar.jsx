@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+// Navbar.jsx
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
 
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(false);
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -55,12 +58,46 @@ export default function Navbar() {
           <li className="nav-item">
             <Link className="nav-link" to="/membres">Nos membres du bureau</Link>
           </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/login">Se connecter</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/register">S'inscrire</Link>
-          </li>
+
+          {currentUser ? (
+  <>
+    <li className="nav-item">
+      <Link className="nav-link" to="/profile">
+        👤 Bonjour {currentUser.prenom || currentUser.displayName || "Utilisateur"}
+      </Link>
+    </li>
+
+    {currentUser.role === 'admin' && (
+      <li className="nav-item">
+        <Link className="nav-link" to="/admin">⚙️ Admin</Link>
+      </li>
+    )}
+
+    <li className="nav-item">
+      <button
+        className="btn btn-danger nav-link"
+        onClick={() => {
+          setCurrentUser(null);
+          localStorage.removeItem('user');
+          window.location.reload(); 
+        }}
+      >
+        Se déconnecter
+      </button>
+    </li>
+  </>
+) : (
+  <>
+    <li className="nav-item">
+      <Link className="nav-link" to="/login">Se connecter</Link>
+    </li>
+    <li className="nav-item">
+      <Link className="nav-link" to="/register">S'inscrire</Link>
+    </li>
+  </>
+)}
+
+
           <li className="nav-item">
             <button className="btn btn-secondary ms-3" onClick={toggleTheme}>
               {darkMode ? "☀️ Mode clair" : "🌙 Mode sombre"}
