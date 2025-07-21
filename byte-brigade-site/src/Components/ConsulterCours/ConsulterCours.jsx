@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { db } from '../firebase'
+import { db } from '../Firebase/Firebase'
 import { collection, getDocs } from 'firebase/firestore'
 
 function ConsulterCours() {

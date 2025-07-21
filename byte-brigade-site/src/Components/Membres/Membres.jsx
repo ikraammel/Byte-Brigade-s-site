@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import CardMembre from './CardMembre'
+import ConnectedUsers from './ConnectedUsers';
 
 const membresData = {
   "2024-2025": [
@@ -52,7 +53,7 @@ function Membres(){
         </div>
         ))}
       </div>
-
+        <ConnectedUsers/>
     </div>
   );
 }

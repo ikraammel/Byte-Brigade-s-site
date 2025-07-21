@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth, db } from '../firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../Firebase/Firebase';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { AuthContext } from '../AuthContext';
 
 function LoginGoogle() {
   const navigate = useNavigate();
-  const { setCurrentUser } = useContext(AuthContext); // récupère le setter du contexte
+  const { setCurrentUser } = useContext(AuthContext);
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -19,17 +19,28 @@ function LoginGoogle() {
       const userDocRef = doc(db, 'users', user.uid);
       const userDocSnap = await getDoc(userDocRef);
 
+      // Si c’est la première connexion Google, on crée le document dans "users"
       if (!userDocSnap.exists()) {
-        // Ajoute un rôle par défaut si premier login avec Google
         await setDoc(userDocRef, {
           email: user.email,
-          role: 'user', // À ajuster dans Firestore si besoin
+          role: 'user',
           prenom: user.displayName?.split(' ')[0] || '',
           nom: user.displayName?.split(' ')[1] || '',
         });
       }
 
       const userData = (await getDoc(userDocRef)).data();
+
+      // 🔥 MISE À JOUR DE LA COLLECTION connectedUsers
+      const connectedUserRef = doc(db, 'connectedUsers', user.uid);
+      await setDoc(connectedUserRef, {
+        uid: user.uid,
+        email: user.email,
+        nom: userData.nom,
+        prenom: userData.prenom,
+        isOnline: true,
+        lastSeen: serverTimestamp()
+      });
 
       const userInfo = {
         email: user.email,
@@ -40,7 +51,7 @@ function LoginGoogle() {
       };
 
       localStorage.setItem('user', JSON.stringify(userInfo));
-      setCurrentUser(userInfo); // met à jour le contexte
+      setCurrentUser(userInfo);
 
       alert(`Bienvenue ${user.displayName}`);
       navigate(userData.role === 'admin' ? '/admin' : '/cours');
@@ -53,7 +64,7 @@ function LoginGoogle() {
 
   return (
     <button type="button" className="btn btn-outline-light w-100 mt-3" onClick={handleGoogleLogin}>
-      Se connecter avec Google
+      <img src="google.png" alt="google" /> Se connecter avec Google 
     </button>
   );
 }
