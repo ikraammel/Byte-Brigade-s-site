@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import CardMembre from './CardMembre'
 import ConnectedUsers from './ConnectedUsers';
+import { AuthContext } from '../AuthContext';
 
 const membresData = {
   "2024-2025": [
@@ -32,6 +33,7 @@ const membresData = {
 }
 function Membres(){
   const [annee,setannee] = useState("2024-2025")
+  const {currentUser} = useContext(AuthContext)
 
   return(
     <div className="container text-center py-5">
@@ -53,7 +55,7 @@ function Membres(){
         </div>
         ))}
       </div>
-        <ConnectedUsers/>
+      {currentUser && <ConnectedUsers/>}
     </div>
   );
 }
