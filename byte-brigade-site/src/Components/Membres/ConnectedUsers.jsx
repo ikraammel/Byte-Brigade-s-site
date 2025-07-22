@@ -8,18 +8,24 @@ export default function ConnectedUsers() {
   const [connectedUsers, setConnectedUsers] = useState([]);
 
   useEffect(() => {
-    const q = collection(db, "connectedUsers");
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const allUsers = snapshot.docs.map((doc) => doc.data());
-      console.log("Tous les utilisateurs trouvés :", allUsers);
+  const q = collection(db, "connectedUsers");
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    // Récupérer tous les utilisateurs
+    const allUsers = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-      const onlineUsers = allUsers.filter((user) => user.isOnline === true);
-      console.log("Utilisateurs en ligne :", onlineUsers);
-      setConnectedUsers(onlineUsers);
+    // Trier par lastSeen décroissant (les plus récents d'abord)
+    allUsers.sort((a, b) => {
+      if (!a.lastSeen) return 1;
+      if (!b.lastSeen) return -1;
+      return b.lastSeen.toMillis() - a.lastSeen.toMillis();
     });
 
-    return () => unsubscribe();
-  }, []);
+    setConnectedUsers(allUsers);
+  });
+
+  return () => unsubscribe();
+}, []);
+
 
   return (
     <div className="mt-5">
