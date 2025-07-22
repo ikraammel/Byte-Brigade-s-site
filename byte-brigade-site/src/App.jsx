@@ -15,7 +15,17 @@ import ProtectProfile from "./Components/ProtectRoute/ProtectProfile";
 import ResetPassword from "./Components/Login/ResetPassword";
 import { auth, db } from "./Components/Firebase/Firebase";
 import { updateDoc, doc, serverTimestamp } from "firebase/firestore";
+import AdhesionForm from "./Adhesion/AdhesionForm";
+import FloatingButton from "./Adhesion/FloatingButton";
 
+function AdhesionPage() {
+  return (
+    <>
+      <AdhesionForm />
+      <FloatingButton />
+    </>
+  );
+}
 function App() {
   // Met à jour isOnline=false quand on ferme l'onglet ou recharge
   useEffect(() => {
@@ -39,6 +49,7 @@ function App() {
   return (
     <Router>
       <Navbar />
+      <FloatingButton />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -69,6 +80,7 @@ function App() {
           }
         />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/adhesion" element={<AdhesionPage />} />
       </Routes>
     </Router>
   );

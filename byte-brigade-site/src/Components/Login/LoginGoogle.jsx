@@ -31,7 +31,6 @@ function LoginGoogle() {
 
       const userData = (await getDoc(userDocRef)).data();
 
-      // 🔥 MISE À JOUR DE LA COLLECTION connectedUsers
       const connectedUserRef = doc(db, 'connectedUsers', user.uid);
       await setDoc(connectedUserRef, {
         uid: user.uid,
