@@ -17,6 +17,7 @@ import { auth, db } from "./Components/Firebase/Firebase";
 import { updateDoc, doc, serverTimestamp } from "firebase/firestore";
 import AdhesionForm from "./Adhesion/AdhesionForm";
 import FloatingButton from "./Adhesion/FloatingButton";
+import ConfirmResetPassword from "./Components/Login/ConfirmResetPassword";
 
 function AdhesionPage() {
   return (
@@ -80,6 +81,7 @@ function App() {
           }
         />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/reset-confirm" element={<ConfirmResetPassword />} />
         <Route path="/adhesion" element={<AdhesionPage />} />
       </Routes>
     </Router>
