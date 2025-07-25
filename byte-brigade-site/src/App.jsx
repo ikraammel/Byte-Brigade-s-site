@@ -15,8 +15,8 @@ import ProtectProfile from "./Components/ProtectRoute/ProtectProfile";
 import ResetPassword from "./Components/Login/ResetPassword";
 import { auth, db } from "./Components/Firebase/Firebase";
 import { updateDoc, doc, serverTimestamp } from "firebase/firestore";
-import AdhesionForm from "./Adhesion/AdhesionForm";
-import FloatingButton from "./Adhesion/FloatingButton";
+import AdhesionForm from "./Components/Adhesion/AdhesionForm";
+import FloatingButton from "./Components/Adhesion/FloatingButton";
 import ConfirmResetPassword from "./Components/Login/ConfirmResetPassword";
 
 function AdhesionPage() {

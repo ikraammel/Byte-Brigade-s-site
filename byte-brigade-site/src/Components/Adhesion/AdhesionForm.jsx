@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import emailjs from '@emailjs/browser'; 
-import { db } from "../Components/Firebase/Firebase";
+import { db } from "../Firebase/Firebase";
 
 export default function AdhesionForm() {
   const [formData, setFormData] = useState({

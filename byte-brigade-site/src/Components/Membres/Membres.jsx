@@ -50,11 +50,15 @@ function Membres(){
 
       <div className="row justify-content-center">
         {membresData[annee].map((m, i) => (
-        <div key={i} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-          <CardMembre {...m} />
-        </div>
+          <div
+            key={i}
+            className="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center mb-4"
+          >
+            <CardMembre {...m} />
+          </div>
         ))}
       </div>
+
       {currentUser && <ConnectedUsers/>}
     </div>
   );
