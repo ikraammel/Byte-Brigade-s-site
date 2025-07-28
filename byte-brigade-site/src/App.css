@@ -49,3 +49,46 @@ body.dark-mode {
 a.nav-link.dark-mode {
   color: #ccc !important;
 }
+/* App.css */
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1; /* pousse le footer en bas */
+}
+:root {
+  --violet: #6A1B9A;
+  --bleu: #1E88E5;
+  --blanc: #ffffff;
+}
+.footer-custom {
+  background: linear-gradient(to right, var(--violet), var(--bleu));
+  color: var(--blanc);
+  position: relative;
+  z-index: 1;
+}
+.footer-custom a {
+  color: var(--blanc);
+  font-size: 1.4rem;
+}
+.footer-custom a:hover {
+  color: #ddd;
+}
+.footer-custom .btn {
+  background-color: var(--blanc);
+  color: var(--violet);
+  border: none;
+  transition: 0.3s ease;
+}
+.footer-custom .btn:hover {
+  background-color: var(--violet);
+  color: var(--blanc);
+}
