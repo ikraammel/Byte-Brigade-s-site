@@ -1,6 +1,7 @@
   import React, { useEffect } from "react";
   import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
   import "./App.css";
+  import 'bootstrap/dist/css/bootstrap.min.css';
 
   import Home from "./Components/HomePage/Home";
   import Navbar from "./Components/Navbar/Navbar";
@@ -19,6 +20,7 @@
   import FloatingButton from "./Components/Adhesion/FloatingButton";
   import ConfirmResetPassword from "./Components/Login/ConfirmResetPassword";
   import Footer from "./Components/Footer/Footer";
+import Activites from "./Components/Activites/Activites";
 
   function AdhesionPage() {
     return (
@@ -59,6 +61,7 @@
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/membres" element={<Membres />} />
+                <Route path="/activites" element={<Activites />} />
                 <Route
                   path="/admin"
                   element={
