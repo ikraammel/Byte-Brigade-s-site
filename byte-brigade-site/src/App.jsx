@@ -23,12 +23,8 @@
 import Activites from "./Components/Activites/Activites";
 
   function AdhesionPage() {
-    return (
-      <>
-        <AdhesionForm />
-        <FloatingButton />
-      </>
-    );
+    return <AdhesionForm />
+        
   }
   function App() {
     // Met à jour isOnline=false quand on ferme l'onglet ou recharge
@@ -55,7 +51,6 @@ import Activites from "./Components/Activites/Activites";
         <div className="d-flex flex-column min-vh-100">
           <Navbar />
           <div className="app-content">
-              <FloatingButton />
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
@@ -93,6 +88,7 @@ import Activites from "./Components/Activites/Activites";
           </div>
           <Footer/> 
         </div>
+        <FloatingButton />
       </Router>
     );
   }
