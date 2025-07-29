@@ -9,7 +9,7 @@ function Home() {
   return (
     <div className={`home-container ${darkMode ? 'dark-mode' : ''}`}>
       <div className="hero-section">
-        <img src="logo.PNG" alt="Byte Brigade Logo" className="logo" />
+        
         <h1>
           Bienvenue au <span className="highlight">Club Byte Brigade</span>
         </h1>
@@ -40,7 +40,7 @@ function Home() {
 
       <button 
         className="cta-button"
-        onClick={() => window.location.href = "/login"}
+        onClick={() => window.location.href = "/adhesion"}
       >
         Rejoignez-nous
       </button>

@@ -17,7 +17,6 @@
   import { auth, db } from "./Components/Firebase/Firebase";
   import { updateDoc, doc, serverTimestamp } from "firebase/firestore";
   import AdhesionForm from "./Components/Adhesion/AdhesionForm";
-  import FloatingButton from "./Components/Adhesion/FloatingButton";
   import ConfirmResetPassword from "./Components/Login/ConfirmResetPassword";
   import Footer from "./Components/Footer/Footer";
 import Activites from "./Components/Activites/Activites";
@@ -88,7 +87,6 @@ import Activites from "./Components/Activites/Activites";
           </div>
           <Footer/> 
         </div>
-        <FloatingButton />
       </Router>
     );
   }
