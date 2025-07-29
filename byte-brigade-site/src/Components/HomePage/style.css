@@ -127,3 +127,33 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+.home-container {
+  background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Éléments clés plus visibles en mode sombre */
+.dark-mode .home-container {
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--bg-primary) 20%, black 80%),
+    color-mix(in srgb, var(--bg-secondary) 20%, black 80%));
+}
+
+.highlight {
+  color: var(--bg-accent);
+  text-shadow: 0 0 10px rgba(255, 235, 59, 0.3);
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--bg-accent);
+}
+
+.dark-mode .feature-card {
+  background: rgba(30, 30, 30, 0.8);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+  border-color: var(--bg-secondary);
+}

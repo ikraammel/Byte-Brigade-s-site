@@ -1,32 +1,14 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../AuthContext";
 import { setOfflineStatus } from "../Firebase/UserStatus"; 
 
-
 export default function Navbar() {
-  const [darkMode, setDarkMode] = useState(false);
-  const { currentUser, setCurrentUser } = useContext(AuthContext);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
-  }, [darkMode]);
+  const { currentUser, setCurrentUser, darkMode, setDarkMode } = useContext(AuthContext);
 
   const toggleTheme = () => {
     const newTheme = !darkMode;
     setDarkMode(newTheme);
-    localStorage.setItem("theme", newTheme ? "dark" : "light");
   };
 
   const handleLogout = async () => {
