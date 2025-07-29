@@ -3,11 +3,12 @@ import React, { createContext, useState, useEffect } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(() => {
+    const [darkMode, setDarkMode] = useState(false);
+    const [currentUser, setCurrentUser] = useState(() => {
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
-
+  
   useEffect(() => {
     // Optionnel : pour sync localStorage à chaque changement
     if (currentUser) {
@@ -18,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   }, [currentUser]);
 
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
+    <AuthContext.Provider value={{ currentUser, setCurrentUser ,currentUser, setCurrentUser, darkMode, setDarkMode }}>
       {children}
     </AuthContext.Provider>
   );

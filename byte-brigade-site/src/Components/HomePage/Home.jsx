@@ -1,28 +1,48 @@
 import React from 'react';
 import './style.css';
+import { useContext } from 'react';
+import { AuthContext } from '../AuthContext';
 
 function Home() {
+  const { darkMode } = useContext(AuthContext);
+  
   return (
-    <div className="homepage container text-center py-5">
-      <img src="logo.PNG" alt="logo" className="logo mb-4" />
+    <div className={`home-container ${darkMode ? 'dark-mode' : ''}`}>
+      <div className="hero-section">
+        <img src="logo.PNG" alt="Byte Brigade Logo" className="logo" />
+        <h1>
+          Bienvenue au <span className="highlight">Club Byte Brigade</span>
+        </h1>
+        <p className="subtitle">
+          Le club informatique de l'ENSAS, où passion et technologie se rencontrent
+        </p>
+      </div>
 
-      <h1 className="display-4 fw-bold mb-3">Bienvenue au <span className="text-primary">Club Byte Brigade</span></h1>
-      <p className="lead mb-5">Club informatique de l'ENSAS, passionné de code, d'IA et de technologies !</p>
+      <div className="features-section">
+        <div className="feature-card">
+          <div className="icon">📚</div>
+          <h3>Partage de connaissances</h3>
+          <p>Cours, tutoriels et ressources pour tous les niveaux</p>
+        </div>
+        
+        <div className="feature-card">
+          <div className="icon">👥</div>
+          <h3>Projets collaboratifs</h3>
+          <p>Créez des solutions innovantes en équipe</p>
+        </div>
+        
+        <div className="feature-card">
+          <div className="icon">🏆</div>
+          <h3>Événements tech</h3>
+          <p>Hackathons, conférences et compétitions</p>
+        </div>
+      </div>
 
-      <section className="mb-5">
-        <h2 className="h4 mb-3">Nos objectifs</h2>
-        <ul className="list-unstyled">
-          <li className="mb-2">✅ Partage de cours</li>
-          <li className="mb-2">👨‍💻 Création de projets en équipe</li>
-          <li>🚀 Participation aux événements & hackathons</li>
-        </ul>
-      </section>
-
-      <button
-        className="btn btn-primary btn-lg px-4"
+      <button 
+        className="cta-button"
         onClick={() => window.location.href = "/login"}
       >
-        Se connecter
+        Rejoignez-nous
       </button>
     </div>
   );

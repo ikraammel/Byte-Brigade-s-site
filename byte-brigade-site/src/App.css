@@ -31,23 +31,42 @@ body {
 
 /* App.css */
 
+/* Mode sombre global */
 body.dark-mode {
-  background: linear-gradient(to right, #0f0f0f, #1a1a1a) !important;
-  color: #ffffff !important;
+  background: linear-gradient(to right, #0f0f0f, #1a1a1a);
+  color: #ffffff;
 }
 
-
-.navbar.dark-mode {
-  background-color: #1f1f1f !important;
+/* Navbar en mode sombre */
+.navbar-custom.dark-mode {
+  background-color: #1a1a1a !important;
+  border-bottom: 1px solid #333;
 }
 
-.btn-custom.dark-mode {
-  background-color: #444;
-  color: white;
+/* Liens de la navbar en mode sombre */
+.navbar-custom.dark-mode .nav-link {
+  color: #ddd !important;
 }
 
-a.nav-link.dark-mode {
-  color: #ccc !important;
+.navbar-custom.dark-mode .nav-link:hover {
+  color: #fff !important;
+}
+
+/* Bouton flottant en mode sombre */
+.dark-mode .floating-button {
+  background-color: #4a1b9a;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+/* Cartes d'activités en mode sombre */
+.dark-mode .activity-card {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid #333;
+}
+
+/* Footer en mode sombre */
+.dark-mode .footer-custom {
+  background: linear-gradient(to right, #1a1a1a, #0f0f0f);
 }
 /* App.css */
 

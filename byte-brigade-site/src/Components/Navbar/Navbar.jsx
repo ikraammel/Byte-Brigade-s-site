@@ -39,7 +39,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark navbar-custom px-4">
+    <nav className={`navbar navbar-expand-lg navbar-dark navbar-custom px-4 ${darkMode ? "dark-mode" : ""}`}>
       <Link className="navbar-brand" to="/">
         <img src="logo.PNG" alt="logo" height="40" className="me-2" />
         Byte Brigade
