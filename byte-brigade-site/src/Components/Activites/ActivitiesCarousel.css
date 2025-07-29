@@ -113,3 +113,42 @@
 .modal-next {
   right: 10px;
 }
+/* Ajoutez ces règles pour les vidéos */
+.carousel-video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 250px; /* Même hauteur que les images */
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.carousel-video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Conserve les proportions */
+  transition: transform 0.4s ease;
+}
+
+.carousel-video-wrapper:hover video {
+  transform: scale(1.1); /* Même effet de zoom que les images */
+}
+
+/* Bouton plein écran pour vidéos */
+.carousel-video-wrapper .fullscreen-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  padding: 6px 10px;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.2s ease;
+}
+
+.carousel-video-wrapper .fullscreen-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+}

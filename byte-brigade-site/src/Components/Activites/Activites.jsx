@@ -23,6 +23,9 @@ const activities = [
       "activites/gitex1.jpg",
       "activites/gitex2.jpg",
       "activites/gitex3.jpg"
+    ],
+    video: [
+      "activites/gitex3.mp4",
     ]
   },
   {
@@ -44,6 +47,9 @@ const activities = [
       "activites/UM6P2.jpg",
       "activites/UM6P3.jpg",
       "activites/UM6P4.jpg"
+    ],
+    video: [
+      "activites/UM6P5.mp4"
     ]
   },
   {
@@ -108,7 +114,7 @@ function Activites() {
                       <button
                         className="fullscreen-btn"
                         onClick={() => {
-                        setModalImages(activity.images); // ensemble d’images de cette activité
+                        setModalImages([...(activity.images || []), ...(activity.video || [])]);
                         setModalIndex(i);                // index cliqué
                       }}
 
@@ -121,21 +127,22 @@ function Activites() {
                 ))}
 
 
-                {/* 🎥 Vidéo si présente */}
-                {activity.video && (
-                  <Carousel.Item key="video">
-                    <div className="carousel-img-wrapper">
-                      <video
-                        controls
-                        className="w-100 rounded"
-                        style={{ maxHeight: "250px", objectFit: "cover" }}
-                      >
-                        <source src={activity.video} type="video/mp4" />
-                        Votre navigateur ne supporte pas les vidéos HTML5.
-                      </video>
-                    </div>
-                  </Carousel.Item>
-                )}
+                {Array.isArray(activity.video) &&
+  activity.video.map((vid, vIdx) => (
+    <Carousel.Item key={`vid-${vIdx}`}>
+      <div className="carousel-video-wrapper">
+        <video
+          controls
+          className="w-100 rounded"
+          style={{ maxHeight: "500px", width: "100%", objectFit: "contain" }}
+        >
+          <source src={vid} type="video/mp4" />
+          Votre navigateur ne supporte pas les vidéos HTML5.
+        </video>
+      </div>
+    </Carousel.Item>
+))}
+
               </Carousel>
 
               <div className="mt-3">
@@ -150,6 +157,7 @@ function Activites() {
                     index={modalIndex}
                     setIndex={setModalIndex}
                   />
+
                 )}
               </div>
             </div>

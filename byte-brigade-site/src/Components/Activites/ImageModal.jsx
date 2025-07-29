@@ -4,6 +4,9 @@ import { Modal } from 'react-bootstrap';
 function ImageModal({ show, onHide, images, index, setIndex }) {
   if (!images || index === null) return null;
 
+  const currentMedia = images[index];
+  const isVideo = currentMedia.endsWith('.mp4') || currentMedia.endsWith('.webm');
+
   const handleNext = () => {
     const nextIndex = (index + 1) % images.length;
     setIndex(nextIndex);
@@ -17,12 +20,24 @@ function ImageModal({ show, onHide, images, index, setIndex }) {
   return (
     <Modal show={show} onHide={onHide} centered size="lg" className="image-modal">
       <Modal.Body className="position-relative p-0">
-        <img
-          src={images[index]}
-          alt="Aperçu"
-          className="w-100"
-          style={{ maxHeight: '80vh', objectFit: 'contain' }}
-        />
+        {isVideo ? (
+          <video
+            controls
+            autoPlay
+            className="w-100"
+            style={{ maxHeight: '80vh', objectFit: 'contain' }}
+          >
+            <source src={currentMedia} type="video/mp4" />
+            Votre navigateur ne supporte pas les vidéos HTML5.
+          </video>
+        ) : (
+          <img
+            src={currentMedia}
+            alt="Aperçu"
+            className="w-100"
+            style={{ maxHeight: '80vh', objectFit: 'contain' }}
+          />
+        )}
 
         <button className="modal-prev" onClick={handlePrev}>‹</button>
         <button className="modal-next" onClick={handleNext}>›</button>
