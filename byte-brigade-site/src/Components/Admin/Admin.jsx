@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../Firebase/Firebase';
 import { collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import AjoutCours from './AjoutCours';
+import { toast } from 'react-toastify';
 
 function Admin() {
   // Cours
@@ -25,6 +26,7 @@ function Admin() {
         setCours(data);
       } catch (error) {
         console.error("Erreur lors de la récupération des cours :", error);
+        toast.error("Erreur lors de la récupération des cours");
       }
       setLoadingCours(false);
     }
@@ -41,22 +43,26 @@ function Admin() {
         setDemandes(data);
       } catch (error) {
         console.error("Erreur lors de la récupération des demandes :", error);
+        toast.error("Erreur lors de la récupération des demandes");
       }
       setLoadingDemandes(false);
     }
     fetchDemandes();
   }, []);
 
-  // Supprimer un cours
+  // Confirmer avec toast avant suppression (cours)
   const handleDelete = async (id) => {
-    if (!window.confirm("Voulez-vous vraiment supprimer ce cours ?")) return;
+    if (window.confirm) {
+      // Pour garder une confirmation simple, tu peux remplacer par un vrai toast confirm plus avancé (bibliothèques externes)
+      if (!window.confirm("Voulez-vous vraiment supprimer ce cours ?")) return;
+    }
     try {
       await deleteDoc(doc(db, "cours", id));
       setCours(cours.filter(c => c.id !== id));
-      alert("Cours supprimé avec succès !");
+      toast.success("Cours supprimé avec succès !");
     } catch (error) {
       console.error("Erreur suppression : ", error);
-      alert("Erreur lors de la suppression.");
+      toast.error("Erreur lors de la suppression.");
     }
   };
 
@@ -71,7 +77,7 @@ function Admin() {
   };
   const handleEditSave = async () => {
     if (editTitre.trim() === '') {
-      alert("Le titre ne peut pas être vide");
+      toast.error("Le titre ne peut pas être vide");
       return;
     }
     try {
@@ -79,26 +85,27 @@ function Admin() {
       setCours(cours.map(c => c.id === editId ? { ...c, titre: editTitre } : c));
       setEditId(null);
       setEditTitre('');
-      alert("Cours mis à jour !");
+      toast.success("Cours mis à jour !");
     } catch (error) {
       console.error("Erreur mise à jour :", error);
-      alert("Erreur lors de la mise à jour.");
+      toast.error("Erreur lors de la mise à jour.");
     }
   };
 
-  // Ajoute cette fonction dans ton composant Admin
-const handleDeleteDemande = async (id) => {
-  if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette demande ?")) return;
-  try {
-    await deleteDoc(doc(db, "demandesAdhesion", id));
-    setDemandes(demandes.filter(d => d.id !== id));
-    alert("Demande supprimée avec succès !");
-  } catch (error) {
-    console.error("Erreur lors de la suppression de la demande :", error);
-    alert("Erreur lors de la suppression.");
-  }
-};
-
+  // Supprimer demande adhésion avec toast
+  const handleDeleteDemande = async (id) => {
+    if (window.confirm) {
+      if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette demande ?")) return;
+    }
+    try {
+      await deleteDoc(doc(db, "demandesAdhesion", id));
+      setDemandes(demandes.filter(d => d.id !== id));
+      toast.success("Demande supprimée avec succès !");
+    } catch (error) {
+      console.error("Erreur lors de la suppression de la demande :", error);
+      toast.error("Erreur lors de la suppression.");
+    }
+  };
 
   return (
     <div className="container mt-5">
@@ -143,7 +150,7 @@ const handleDeleteDemande = async (id) => {
         )}
       </section>
 
-      {/* Nouvelle section : Gestion des demandes d'adhésion */}
+      {/* Section Gestion des demandes d'adhésion */}
       <section style={{ marginTop: '50px' }}>
         <h2>Demandes d'adhésion reçues</h2>
         {loadingDemandes ? (
@@ -198,7 +205,6 @@ const handleDeleteDemande = async (id) => {
           </div>
         )}
       </section>
-
     </div>
   );
 }

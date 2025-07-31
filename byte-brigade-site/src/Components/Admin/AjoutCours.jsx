@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { db } from '../Firebase/Firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { toast } from 'react-toastify';
 
 function AjoutCours() {
   const [titre, setTitre] = useState('')
@@ -15,12 +16,12 @@ function AjoutCours() {
         pdfUrl: url,
         createdAt: serverTimestamp()
       })
-      alert('Cours ajouté avec succès !')
+      toast.success('Cours ajouté avec succès !')
       setTitre('')
       setUrl('')
     } catch (error) {
       console.error("Erreur ajout cours : ", error)
-      alert('Erreur lors de l’ajout du cours.')
+      toast.error('Erreur lors de l’ajout du cours.')
     }
   }
 

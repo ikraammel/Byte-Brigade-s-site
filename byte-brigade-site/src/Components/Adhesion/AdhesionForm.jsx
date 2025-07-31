@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import emailjs from '@emailjs/browser'; 
 import { db } from "../Firebase/Firebase";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function AdhesionForm() {
   const [formData, setFormData] = useState({
@@ -19,6 +21,8 @@ export default function AdhesionForm() {
 
   const competencesOptions = ["Design", "Gestion de projet", "Travail en équipe", "Informatique"];
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
@@ -33,6 +37,11 @@ export default function AdhesionForm() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Veuillez saisir un email valide.");
+      return;
+    }
 
     try {
       // Enregistrement dans Firestore
@@ -60,7 +69,7 @@ export default function AdhesionForm() {
         'template_9ayzxha',
         {
           to_name: "Admin Byte Brigade",
-          from_name: formData.prenom + " " + formData.nom,
+          from_name: `${formData.prenom} ${formData.nom}`,
           to_email: "bytebrigadeclub@gmail.com",
           message: `
 Nouvelle demande d’adhésion reçue :
@@ -80,7 +89,7 @@ Commentaires : ${formData.commentaires}
         '5ClTGt_8TWjsxfOAJ'
       );
 
-      alert("Demande enregistrée et email envoyé !");
+      toast.success("Demande enregistrée et email envoyé !");
       setFormData({
         nom: '',
         prenom: '',
@@ -96,61 +105,141 @@ Commentaires : ${formData.commentaires}
 
     } catch (error) {
       console.error("Erreur lors de l’enregistrement ou de l’envoi d’email :", error);
-      alert("Erreur lors de l'envoi. Veuillez réessayer.");
+      toast.error("Erreur lors de l'envoi. Veuillez réessayer.");
     }
   };
 
   return (
     <div id="formulaire-adhesion" className="container py-5">
-      <h2>Formulaire d'adhésion</h2>
+      <h2 className="text-center mb-4">Formulaire d'adhésion</h2>
       <form onSubmit={handleSubmit} className="mt-4">
-        <div className="mb-3">
-          <input type="text" name="nom" value={formData.nom} onChange={handleChange} placeholder="Nom" className="form-control" required />
+
+        <div className="row mb-3">
+          <div className="col-md-6">
+            <input
+              type="text"
+              name="nom"
+              value={formData.nom}
+              onChange={handleChange}
+              placeholder="Nom"
+              className="form-control"
+              required
+            />
+          </div>
+
+          <div className="col-md-6">
+            <input
+              type="text"
+              name="prenom"
+              value={formData.prenom}
+              onChange={handleChange}
+              placeholder="Prénom"
+              className="form-control"
+              required
+            />
+          </div>
         </div>
+
         <div className="mb-3">
-          <input type="text" name="prenom" value={formData.prenom} onChange={handleChange} placeholder="Prénom" className="form-control" required />
+          <input
+            type="tel"
+            name="tel"
+            value={formData.tel}
+            onChange={handleChange}
+            placeholder="Numéro de téléphone"
+            className="form-control"
+            required
+          />
         </div>
+
         <div className="mb-3">
-          <input type="tel" name="tel" value={formData.tel} onChange={handleChange} placeholder="Numéro de téléphone" className="form-control" required />
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className="form-control"
+            required
+          />
         </div>
+
         <div className="mb-3">
-          <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className="form-control" required />
+          <textarea
+            name="motivation"
+            value={formData.motivation}
+            onChange={handleChange}
+            placeholder="Pourquoi souhaitez-vous rejoindre le club ?"
+            className="form-control"
+            required
+          />
         </div>
-        <div className="mb-3">
-          <textarea name="motivation" value={formData.motivation} onChange={handleChange} placeholder="Pourquoi souhaitez-vous rejoindre le club ?" className="form-control" required />
-        </div>
+
         <div className="mb-3">
           Sexe :
           <div><label><input type="radio" name="sexe" value="Femme" onChange={handleChange} required /> Femme</label></div>
           <div><label><input type="radio" name="sexe" value="Homme" onChange={handleChange} /> Homme</label></div>
         </div>
+
         <div className="mb-3">
-          <input type="text" name="niveau" value={formData.niveau} onChange={handleChange} placeholder="Niveau scolaire" className="form-control" required />
+          <input
+            type="text"
+            name="niveau"
+            value={formData.niveau}
+            onChange={handleChange}
+            placeholder="Niveau scolaire"
+            className="form-control"
+            required
+          />
         </div>
+
         <div className="mb-3">
           Êtes-vous passionné(e) par l’informatique ?
-          <select name="passionne" value={formData.passionne} onChange={handleChange} className="form-select" required>
+          <select
+            name="passionne"
+            value={formData.passionne}
+            onChange={handleChange}
+            className="form-select"
+            required
+          >
             <option value="">-- Choisir --</option>
             <option value="Oui">Oui</option>
             <option value="Non">Non</option>
           </select>
         </div>
+
         <div className="mb-3">
           Compétences :
           {competencesOptions.map((comp, idx) => (
             <div key={idx}>
               <label>
-                <input type="checkbox" name="competences" value={comp} checked={formData.competences.includes(comp)} onChange={handleChange} />
+                <input
+                  type="checkbox"
+                  name="competences"
+                  value={comp}
+                  checked={formData.competences.includes(comp)}
+                  onChange={handleChange}
+                />
                 {" "}{comp}
               </label>
             </div>
           ))}
         </div>
+
         <div className="mb-3">
-          <textarea name="commentaires" value={formData.commentaires} onChange={handleChange} placeholder="Questions ou commentaires ?" className="form-control" />
+          <textarea
+            name="commentaires"
+            value={formData.commentaires}
+            onChange={handleChange}
+            placeholder="Questions ou commentaires ?"
+            className="form-control"
+          />
         </div>
-        <button type="submit" className="btn btn-primary">Envoyer</button>
+
+        <button type="submit" className="btn btn-primary ">Envoyer</button>
       </form>
+
+      <ToastContainer position="top-right" autoClose={4000} hideProgressBar />
     </div>
   );
 }

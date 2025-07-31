@@ -1,15 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth, db } from '../Firebase/Firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { AuthContext } from '../AuthContext';
+import { toast } from 'react-toastify';
 
 function LoginGoogle() {
   const navigate = useNavigate();
   const { setCurrentUser } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleGoogleLogin = async () => {
+    setLoading(true);
+    setError('');
     const provider = new GoogleAuthProvider();
 
     try {
@@ -17,20 +22,27 @@ function LoginGoogle() {
       const user = result.user;
 
       const userDocRef = doc(db, 'users', user.uid);
-      const userDocSnap = await getDoc(userDocRef);
+      let userDocSnap = await getDoc(userDocRef);
 
-      // Si c’est la première connexion Google, on crée le document dans "users"
+      const fullName = user.displayName || "";
+      const nameParts = fullName.split(" ");
+      const prenom = nameParts[0] || "";
+      const nom = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
+
+      // Si première connexion, créer document utilisateur
       if (!userDocSnap.exists()) {
         await setDoc(userDocRef, {
           email: user.email,
           role: 'user',
-          prenom: user.displayName?.split(' ')[0] || '',
-          nom: user.displayName?.split(' ')[1] || '',
+          prenom,
+          nom,
         });
+        userDocSnap = await getDoc(userDocRef); // recharger doc
       }
 
-      const userData = (await getDoc(userDocRef)).data();
+      const userData = userDocSnap.data();
 
+      // Met à jour l'état "en ligne"
       const connectedUserRef = doc(db, 'connectedUsers', user.uid);
       await setDoc(connectedUserRef, {
         uid: user.uid,
@@ -38,7 +50,7 @@ function LoginGoogle() {
         nom: userData.nom,
         prenom: userData.prenom,
         isOnline: true,
-        lastSeen: serverTimestamp()
+        lastSeen: serverTimestamp(),
       });
 
       const userInfo = {
@@ -46,25 +58,57 @@ function LoginGoogle() {
         role: userData.role,
         nom: userData.nom,
         prenom: userData.prenom,
-        displayName: user.displayName
+        displayName: user.displayName,
       };
 
       localStorage.setItem('user', JSON.stringify(userInfo));
       setCurrentUser(userInfo);
 
-      alert(`Bienvenue ${user.displayName}`);
+      toast.success(`Bienvenue ${user.displayName}`);
       navigate(userData.role === 'admin' ? '/admin' : '/cours');
-
     } catch (error) {
       console.error('Erreur Google Auth :', error);
-      alert('Erreur: ' + error.message);
+
+      switch (error.code) {
+        case 'auth/popup-closed-by-user':
+          setError('Connexion annulée. La fenêtre a été fermée.');
+          toast.error('Connexion annulée. La fenêtre a été fermée.');
+          break;
+        case 'auth/network-request-failed':
+          setError('Problème de connexion. Vérifie ta connexion Internet.');
+          toast.error('Problème de connexion. Vérifie ta connexion Internet.');
+          break;
+        case 'auth/popup-blocked':
+          setError('La fenêtre contextuelle a été bloquée. Veuillez autoriser les pop-ups.');
+          toast.error('La fenêtre contextuelle a été bloquée. Veuillez autoriser les pop-ups.');
+          break;
+        default:
+          setError('Une erreur est survenue : ' + error.message);
+          toast.error('Une erreur est survenue : ' + error.message);
+          break;
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <button type="button" className="btn btn-outline-light w-100 mt-3" onClick={handleGoogleLogin}>
-      <img src="google.png" alt="google" /> Se connecter avec Google 
-    </button>
+    <>
+      {error && <div className="text-danger mb-2">{error}</div>}
+      <button
+        type="button"
+        className="btn btn-outline-light w-100 mt-3"
+        onClick={handleGoogleLogin}
+        disabled={loading}
+      >
+        {loading ? 'Connexion en cours...' : (
+          <>
+            <img src="google.png" alt="google" style={{ width: 20, marginRight: 8 }} />
+            Se connecter avec Google
+          </>
+        )}
+      </button>
+    </>
   );
 }
 

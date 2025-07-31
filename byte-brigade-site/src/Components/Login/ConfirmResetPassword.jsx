@@ -29,8 +29,25 @@ function ConfirmResetPassword() {
       setMessage("✅ Mot de passe réinitialisé avec succès.")
       setTimeout(() => navigate('/login'), 3000)
     } catch (error) {
-      setMessage("❌ Erreur : " + error.message)
-    }
+  console.error("Erreur lors de la réinitialisation :", error)
+  switch (error.code) {
+    case "auth/expired-action-code":
+      setMessage("❌ Le lien de réinitialisation a expiré. Veuillez en demander un nouveau.");
+      break;
+    case "auth/invalid-action-code":
+      setMessage("❌ Le lien de réinitialisation est invalide ou a déjà été utilisé.");
+      break;
+    case "auth/user-disabled":
+      setMessage("❌ Ce compte est désactivé.");
+      break;
+    case "auth/weak-password":
+      setMessage("❌ Le mot de passe est trop faible (minimum 6 caractères).");
+      break;
+    default:
+      setMessage("❌ Une erreur s'est produite. Veuillez réessayer.");
+  }
+}
+
   }
 
   return (

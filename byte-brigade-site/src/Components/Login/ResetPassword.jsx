@@ -27,9 +27,23 @@ function ResetPassword() {
       setMessage('✅ Email de réinitialisation envoyé. Vérifiez votre boîte mail (y compris les spams).')
       setTimeout(() => navigate('/login'), 5000) // Redirige après 5s
     } catch (err) {
-      console.error('Erreur envoi mail réinitialisation:', err)
-      setError('❌ Erreur : ' + err.message)
-    }
+  console.error('Erreur envoi mail réinitialisation:', err)
+
+  switch (err.code) {
+    case 'auth/user-not-found':
+      setError("❌ Aucun utilisateur trouvé avec cet email.");
+      break;
+    case 'auth/invalid-email':
+      setError("❌ L'adresse email est invalide.");
+      break;
+    case 'auth/network-request-failed':
+      setError("❌ Problème de connexion. Vérifie ta connexion Internet.");
+      break;
+    default:
+      setError("❌ Une erreur s'est produite. Veuillez réessayer plus tard.");
+  }
+}
+
   }
 
   return (

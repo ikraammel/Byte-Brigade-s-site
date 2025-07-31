@@ -2,6 +2,8 @@
   import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
   import "./App.css";
   import 'bootstrap/dist/css/bootstrap.min.css';
+  import { ToastContainer } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css'; 
 
   import Home from "./Components/HomePage/Home";
   import Navbar from "./Components/Navbar/Navbar";
@@ -46,48 +48,62 @@ import Activites from "./Components/Activites/Activites";
     }, []);
 
     return (
+     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Router>
-        <div className="d-flex flex-column min-vh-100">
-          <Navbar />
-          <div className="app-content">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/membres" element={<Membres />} />
-                <Route path="/activites" element={<Activites />} />
-                <Route
-                  path="/admin"
-                  element={
-                    <ProtectedRouteAdmin>
-                      <Admin />
-                    </ProtectedRouteAdmin>
-                  }
-                />
-                <Route
-                  path="/cours"
-                  element={
-                    <ProtectProfile>
-                      <ConsulterCours />
-                    </ProtectProfile>
-                  }
-                />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectProfile>
-                      <Profile />
-                    </ProtectProfile>
-                  }
-                />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/reset-confirm" element={<ConfirmResetPassword />} />
-                <Route path="/adhesion" element={<AdhesionPage />} />
-              </Routes>
+          <div className="d-flex flex-column min-vh-100">
+            <Navbar />
+            <div className="app-content">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/membres" element={<Membres />} />
+                  <Route path="/activites" element={<Activites />} />
+                  <Route
+                    path="/admin"
+                    element={
+                      <ProtectedRouteAdmin>
+                        <Admin />
+                      </ProtectedRouteAdmin>
+                    }
+                  />
+                  <Route
+                    path="/cours"
+                    element={
+                      <ProtectProfile>
+                        <ConsulterCours />
+                      </ProtectProfile>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <ProtectProfile>
+                        <Profile />
+                      </ProtectProfile>
+                    }
+                  />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/reset-confirm" element={<ConfirmResetPassword />} />
+                  <Route path="/adhesion" element={<AdhesionPage />} />
+                </Routes>
+            </div>
+            <Footer/> 
           </div>
-          <Footer/> 
-        </div>
-      </Router>
+        </Router>
+     </>
+      
     );
   }
 
