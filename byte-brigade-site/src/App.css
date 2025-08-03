@@ -1,49 +1,100 @@
 :root {
+  /* Palette BYTE BRIGADE - Mode Clair */
+  --violet-tech: #7B2CBF;     /* Violet énergique */
+  --bleu-neon: #00B4D8;       /* Bleu cyan lumineux */
+  --blanc: #FFFFFF;
+  --noir: #0A0A0A;
+  --gris-glass: rgba(255, 255, 255, 0.1);
+  --glow: 0 0 10px rgba(0, 180, 216, 0.5);
+
+  /* Anciennes variables (conservées pour compatibilité) */
   --violet: #6A1B9A;
   --bleu: #1E88E5;
-  --blanc: #ffffff;
-  --gris-clair: #f3f3f3;
 }
 
-body {
-  background: linear-gradient(to right, var(--violet), var(--bleu));
+/* === Animation "circuits électriques" (mode clair uniquement) === */
+@keyframes byte-flicker {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.2; }
+}
+
+body:not(.dark-mode)::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="20" viewBox="0 0 100 20"><path d="M10,10 L90,10" stroke="%2300B4D8" stroke-width="0.3" stroke-dasharray="3,2"/></svg>') repeat,
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="100" viewBox="0 0 20 100"><path d="M10,10 L10,90" stroke="%237B2CBF" stroke-width="0.3" stroke-dasharray="3,2"/></svg>') repeat;
+  background-size: 100px 50px, 50px 100px;
+  opacity: 0.05;
+  z-index: -1;
+  pointer-events: none;
+  animation: byte-flicker 3s infinite alternate;
+}
+
+/* === Mode clair === */
+body:not(.dark-mode) {
+  background: linear-gradient(to right, var(--violet-tech), var(--bleu-neon));
   color: var(--blanc);
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
 }
 
-
-.navbar-custom {
-  background-color: var(--violet);
+.navbar-custom:not(.dark-mode) {
+  background-color: var(--violet-tech);
+  border-bottom: 1px solid var(--bleu-neon);
 }
 
-.btn-custom {
-  background-color: var(--bleu);
-  color: var(--blanc);
-  border: none;
+.btn-custom:not(.dark-mode) {
+  background-color: var(--bleu-neon);
+  color: var(--noir);
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-custom:hover {
-  background-color: #1565c0;
+.btn-custom:not(.dark-mode)::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    transparent 45%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 55%
+  );
+  transform: rotate(30deg);
+  animation: btn-circuit 2s infinite linear;
 }
 
-/* App.css */
+@keyframes btn-circuit {
+  to { left: 100%; }
+}
 
-/* Mode sombre global */
+.activity-card:not(.dark-mode) {
+  background: var(--gris-glass);
+  border: 1px solid rgba(0, 180, 216, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.activity-card:not(.dark-mode):hover {
+  box-shadow: var(--glow);
+}
+
+/* === Mode sombre (inchangé) === */
 body.dark-mode {
   background: linear-gradient(to right, #0f0f0f, #1a1a1a);
   color: #ffffff;
 }
 
-/* Navbar en mode sombre */
 .navbar-custom.dark-mode {
   background-color: #1a1a1a !important;
   border-bottom: 1px solid #333;
 }
 
-/* Liens de la navbar en mode sombre */
 .navbar-custom.dark-mode .nav-link {
   color: #ddd !important;
 }
@@ -52,24 +103,21 @@ body.dark-mode {
   color: #fff !important;
 }
 
-/* Bouton flottant en mode sombre */
 .dark-mode .floating-button {
   background-color: #4a1b9a;
   box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
 
-/* Cartes d'activités en mode sombre */
 .dark-mode .activity-card {
   background-color: rgba(0, 0, 0, 0.3);
   border: 1px solid #333;
 }
 
-/* Footer en mode sombre */
 .dark-mode .footer-custom {
   background: linear-gradient(to right, #1a1a1a, #0f0f0f);
 }
-/* App.css */
 
+/* === Structure globale (commune aux deux modes) === */
 html, body, #root {
   height: 100%;
   margin: 0;
@@ -81,36 +129,37 @@ html, body, #root {
 }
 
 .app-content {
-  flex: 1; /* pousse le footer en bas */
+  flex: 1;
 }
-:root {
-  --violet: #6A1B9A;
-  --bleu: #1E88E5;
-  --blanc: #ffffff;
-}
+
 .footer-custom {
   background: linear-gradient(to right, var(--violet), var(--bleu));
   color: var(--blanc);
   position: relative;
   z-index: 1;
 }
+
 .footer-custom a {
   color: var(--blanc);
   font-size: 1.4rem;
 }
+
 .footer-custom a:hover {
   color: #ddd;
 }
+
 .footer-custom .btn {
   background-color: var(--blanc);
   color: var(--violet);
   border: none;
   transition: 0.3s ease;
 }
+
 .footer-custom .btn:hover {
   background-color: var(--violet);
   color: var(--blanc);
 }
+
 .activities {
   background: linear-gradient(to right, var(--violet), var(--bleu));
 }
@@ -131,4 +180,66 @@ html, body, #root {
   height: 180px;
   object-fit: cover;
   border-radius: 12px;
+}
+/* Navbar Mode Clair */
+.navbar-custom:not(.dark-mode) {
+  background: linear-gradient(135deg, var(--violet-tech) 0%, #5A00A3 100%);
+  border-bottom: 1px solid var(--bleu-neon);
+  box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-custom:not(.dark-mode) .navbar-brand {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
+}
+
+.navbar-custom:not(.dark-mode) .nav-link {
+  position: relative;
+  margin: 0 10px;
+  padding: 8px 15px !important;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.navbar-custom:not(.dark-mode) .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 15px;
+  width: 0;
+  height: 2px;
+  background: var(--bleu-neon);
+  transition: width 0.3s ease;
+}
+
+.navbar-custom:not(.dark-mode) .nav-link:hover {
+  background: rgba(0, 180, 216, 0.1);
+}
+
+.navbar-custom:not(.dark-mode) .nav-link:hover::after {
+  width: calc(100% - 30px);
+}
+
+/* Bouton déconnexion (mode clair) */
+.navbar-custom:not(.dark-mode) .btn-danger {
+  background: linear-gradient(to right, #FF416C, #FF4B2B);
+  border: none;
+  box-shadow: 0 2px 10px rgba(255, 75, 43, 0.4);
+}
+
+/* Bouton theme toggle */
+.navbar-custom:not(.dark-mode) .btn-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--bleu-neon);
+  color: var(--bleu-neon);
+}
+
+/* Navbar Mode Sombre (inchangée) */
+.navbar-custom.dark-mode {
+  /* Vos styles existants sont préservés */
+  background-color: #1a1a1a !important;
+  border-bottom: 1px solid #333;
 }

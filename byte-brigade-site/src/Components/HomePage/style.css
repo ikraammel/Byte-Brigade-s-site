@@ -8,13 +8,15 @@
 }
 
 .home-container {
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
-  padding: 2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: var(--text-light);
-  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;     /* Centre verticalement */
+  justify-content: center; /* Centre horizontalement */
+  flex-direction: column;
 }
+
 
 /* Mode sombre */
 .home-container.dark-mode {
@@ -22,10 +24,14 @@
 }
 
 .hero-section {
-  max-width: 800px;
-  margin: 0 auto 3rem;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
   text-align: center;
-  padding: 2rem 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .logo {
@@ -46,12 +52,27 @@ h1 {
   font-weight: 800;
 }
 
+.hero-section h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
+}
+
 .subtitle {
   font-size: 1.3rem;
-  opacity: 0.9;
-  max-width: 600px;
-  margin: 0 auto;
+  font-weight: normal; /* 👈 Assure que ce n'est pas en gras */
+  margin-top: 0.5rem;
+  margin-left: 40px; /* ou autre décalage souhaité */
+  text-align: left; /* si tu veux qu'elle ne soit pas centrée */
+  color: inherit; /* garde la couleur actuelle */
+  font-size: 1rem;
+  font-weight: 500; /* ou "normal" */
+  margin-left: 40px;
+  color: #aaa7a7;
 }
+
+
 
 .features-section {
   display: grid;
@@ -156,4 +177,303 @@ h1 {
   background: rgba(30, 30, 30, 0.8);
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
   border-color: var(--bg-secondary);
+}
+/* ===== NOUVEAU POSITIONNEMENT ===== */
+.home-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 100px; /* Espace pour le logo */
+  position: relative;
+  z-index: 2;
+}
+
+.logo-top-right {
+  position: absolute;
+  right: 50px;
+  top: 50px; /* Position plus haute */
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+  animation:  6s ease-in-out infinite;
+}
+
+/* Animation légèrement modifiée */
+@keyframes floatAndGlow {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    filter: drop-shadow(0 0 10px rgba(123, 44, 191, 0.5));
+  }
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+    filter: drop-shadow(0 0 20px rgba(0, 180, 216, 0.8));
+  }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .logo-top-right {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 0 auto 30px;
+    display: block;
+  }
+  
+  .hero-section {
+    padding-top: 40px;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo-top-right {
+    width: 150px;
+    height: 150px;
+  }
+}
+/* Animation principale */
+@keyframes floatAndGlow {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    filter: drop-shadow(0 0 10px rgba(123, 44, 191, 0.5));
+  }
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+    filter: drop-shadow(0 0 20px rgba(0, 180, 216, 0.8));
+  }
+}
+
+@keyframes pulseCircle {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% { 
+    transform: scale(1.1);
+    opacity: 0.7;
+    border-color: var(--violet-tech);
+  }
+}
+
+/* Ajustements du contenu */
+.hero-section {
+  max-width: 70%;
+  margin: 0 auto;
+  padding-top: 80px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .hero-section {
+    max-width: 90%;
+    padding-top: 40px;
+  }
+}
+
+
+@keyframes pulseGlow {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.05);
+    opacity: 0.6;
+  }
+}
+
+
+.home-container {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-section {
+  text-align: center;
+  max-width: 60%;
+  margin: -80px auto 0 5%; /* Texte remonté et centré */
+  padding-top: 0;
+  position: relative;
+  z-index: 2;
+}
+
+/* Style unifié pour le logo */
+.logo-container {
+  position: absolute;
+  right: 50px;
+  top: 50px;
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+  animation: floatAndGlow 6s ease-in-out infinite;
+}
+
+/* Animation principale */
+@keyframes floatAndGlow {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    filter: drop-shadow(0 0 10px rgba(123, 44, 191, 0.5));
+  }
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+    filter: drop-shadow(0 0 20px rgba(0, 180, 216, 0.8));
+  }
+}
+
+/* Nouvel effet de particules élégantes */
+.logo-container::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: 
+    radial-gradient(circle, var(--bleu-neon) 1px, transparent 2px) 0 0 / 20px 20px;
+  opacity: 0.3;
+  animation: particleMove 40s linear infinite;
+}
+
+@keyframes particleMove {
+  from { background-position: 0 0; }
+  to { background-position: 100px 100px; }
+}
+
+/* Mode sombre */
+.dark-mode .logo-container::before {
+  background: 
+    radial-gradient(circle, var(--violet-tech) 1px, transparent 2px) 0 0 / 20px 20px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .logo-container {
+    width: 180px;
+    height: 180px;
+    right: 30px;
+  }
+}
+
+@media (max-width: 992px) {
+  .hero-section {
+    max-width: 80%;
+    margin: -50px auto 0;
+  }
+  
+  .logo-container {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 30px auto;
+    width: 160px;
+    height: 160px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    max-width: 90%;
+    margin-top: -30px;
+  }
+  
+  .logo-container {
+    width: 140px;
+    height: 140px;
+  }
+}
+.logo-electric {
+  position: absolute;
+  right: 50px;
+  top: 50px;
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+  animation: floatAndGlow 6s ease-in-out infinite;
+}
+
+/* Flottement + lueur animée */
+@keyframes floatAndGlow {
+  0%, 100% {
+    transform: translateY(0);
+    filter: drop-shadow(0 0 8px #00b4d8);
+  }
+  50% {
+    transform: translateY(-10px);
+    filter: drop-shadow(0 0 18px #5D3FD3);
+  }
+}
+
+/* Halo électrique simple */
+.logo-electric::before {
+  content: "";
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 180, 216, 0.15) 0%, transparent 70%);
+  animation: electricPulse 2.5s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes electricPulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.3;
+  }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .logo-electric {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 30px auto;
+    width: 160px;
+    height: 160px;
+  }
+
+  .logo-electric::before {
+    width: 210px;
+    height: 210px;
+    top: -20px;
+    left: -20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo-electric {
+    width: 140px;
+    height: 140px;
+  }
+
+  .logo-electric::before {
+    width: 190px;
+    height: 190px;
+    top: -15px;
+    left: -15px;
+  }
+}
+.dark-mode .logo-electric::before {
+  background: radial-gradient(circle, rgba(123, 44, 191, 0.25) 0%, transparent 70%);
 }

@@ -65,6 +65,12 @@ export default function Navbar() {
                   {currentUser.prenom || currentUser.displayName || "Utilisateur"}
                 </Link>
               </li>
+               
+               <li className="nav-item">
+                <Link className="nav-link" to="/dashboard">
+                  Dashboard
+                </Link>
+              </li>
 
               {currentUser.role === "admin" && (
                 <li className="nav-item">

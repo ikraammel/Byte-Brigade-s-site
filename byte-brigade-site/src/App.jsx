@@ -22,6 +22,7 @@
   import ConfirmResetPassword from "./Components/Login/ConfirmResetPassword";
   import Footer from "./Components/Footer/Footer";
 import Activites from "./Components/Activites/Activites";
+import ConnectedUsers from "./Components/Dashboard/ConnectedUsers";
 
   function AdhesionPage() {
     return <AdhesionForm />
@@ -70,6 +71,7 @@ import Activites from "./Components/Activites/Activites";
                   <Route path="/register" element={<Register />} />
                   <Route path="/membres" element={<Membres />} />
                   <Route path="/activites" element={<Activites />} />
+                  <Route path="/dashboard" element={<ConnectedUsers />} />
                   <Route
                     path="/admin"
                     element={

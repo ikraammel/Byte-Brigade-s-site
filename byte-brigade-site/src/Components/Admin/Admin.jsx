@@ -3,6 +3,7 @@ import { db } from '../Firebase/Firebase';
 import { collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import AjoutCours from './AjoutCours';
 import { toast } from 'react-toastify';
+import './style.css'
 
 function Admin() {
   // Cours
@@ -150,61 +151,62 @@ function Admin() {
         )}
       </section>
 
-      {/* Section Gestion des demandes d'adhésion */}
-      <section style={{ marginTop: '50px' }}>
-        <h2>Demandes d'adhésion reçues</h2>
-        {loadingDemandes ? (
-          <p>Chargement des demandes...</p>
-        ) : demandes.length === 0 ? (
-          <p>Aucune demande pour le moment.</p>
-        ) : (
-          <div className="table-responsive mt-4">
-            <table className="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Nom</th>
-                  <th>Prénom</th>
-                  <th>Email</th>
-                  <th>Téléphone</th>
-                  <th>Niveau</th>
-                  <th>Sexe</th>
-                  <th>Motivation</th>
-                  <th>Passionné</th>
-                  <th>Compétences</th>
-                  <th>Commentaires</th>
-                  <th>Soumis le</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {demandes.map(demande => (
-                  <tr key={demande.id}>
-                    <td>{demande.nom}</td>
-                    <td>{demande.prenom}</td>
-                    <td>{demande.email}</td>
-                    <td>{demande.tel}</td>
-                    <td>{demande.niveau}</td>
-                    <td>{demande.sexe}</td>
-                    <td>{demande.motivation}</td>
-                    <td>{demande.passionne}</td>
-                    <td>{demande.competences?.join(", ")}</td>
-                    <td>{demande.commentaires}</td>
-                    <td>{demande.timestamp?.toDate().toLocaleString()}</td>
-                    <td>
-                      <button 
-                        onClick={() => handleDeleteDemande(demande.id)} 
-                        className="btn btn-danger btn-sm"
-                      >
-                        Supprimer
-                      </button>
-                    </td>
+      <div style={{ width: '100%', overflowX: 'auto' }}>
+        <div className="demandes-container">
+          <h2>Demandes d'adhésion reçues</h2>
+          {loadingDemandes ? (
+            <p>Chargement des demandes...</p>
+          ) : demandes.length === 0 ? (
+            <p>Aucune demande pour le moment.</p>
+          ) : (
+            <div className="table-responsive mt-4">
+              <table className="demandes-table">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Niveau</th>
+                    <th>Sexe</th>
+                    <th>Motivation</th>
+                    <th>Passionné</th>
+                    <th>Compétences</th>
+                    <th>Commentaires</th>
+                    <th>Soumis le</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+                </thead>
+                <tbody>
+                  {demandes.map(demande => (
+                    <tr key={demande.id}>
+                      <td>{demande.nom}</td>
+                      <td>{demande.prenom}</td>
+                      <td>{demande.email}</td>
+                      <td>{demande.tel}</td>
+                      <td>{demande.niveau}</td>
+                      <td>{demande.sexe}</td>
+                      <td>{demande.motivation}</td>
+                      <td>{demande.passionne}</td>
+                      <td>{demande.competences?.join(", ")}</td>
+                      <td>{demande.commentaires}</td>
+                      <td>{demande.timestamp?.toDate().toLocaleString()}</td>
+                      <td>
+                        <button 
+                          onClick={() => handleDeleteDemande(demande.id)} 
+                          className="btn btn-danger btn-sm"
+                        >
+                          Supprimer
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

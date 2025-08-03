@@ -53,7 +53,7 @@ function ConsulterCours() {
         {c.exercices.map((ex, index) => (
           <li key={index}>
             {typeof ex === 'string' ? (
-              <a href={ex} target="_blank" rel="noopener noreferrer">
+              <a href={ex} target="_blank" rel="noopener noreferrer" style={{ color: '#00008B' }}>
                 🌐 Exercice {index + 1}
               </a>
             ) : (
