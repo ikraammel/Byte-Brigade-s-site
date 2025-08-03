@@ -84,7 +84,114 @@ body:not(.dark-mode) {
   box-shadow: var(--glow);
 }
 
-/* === Mode sombre (inchangé) === */
+/* ===== NAVBAR - ESPACEMENTS UNIFORMES ===== */
+.navbar-custom {
+  padding: 0.5rem 1rem; /* Espacement uniforme pour les deux modes */
+}
+
+.navbar-custom .navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacement identique entre les items */
+}
+
+.navbar-custom .nav-link {
+  padding: 6px 12px !important; /* Padding identique */
+  margin: 0; /* Suppression des marges supplémentaires */
+  white-space: nowrap;
+}
+
+.navbar-custom .btn {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* ===== MODE CLAIR (couleurs et effets conservés) ===== */
+.navbar-custom:not(.dark-mode) {
+  background: linear-gradient(135deg, var(--violet-tech) 0%, #5A00A3 100%);
+  border-bottom: 1px solid var(--bleu-neon);
+  box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-custom:not(.dark-mode) .navbar-brand {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
+}
+
+.navbar-custom:not(.dark-mode) .nav-link {
+  color: #fff;
+  position: relative;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.navbar-custom:not(.dark-mode) .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 15px;
+  width: 0;
+  height: 2px;
+  background: var(--bleu-neon);
+  transition: width 0.3s ease;
+}
+
+.navbar-custom:not(.dark-mode) .nav-link:hover {
+  background: rgba(0, 180, 216, 0.1);
+  color: #00b4d8;
+}
+
+.navbar-custom:not(.dark-mode) .nav-link:hover::after {
+  width: calc(100% - 30px);
+}
+
+.navbar-custom:not(.dark-mode) .btn-danger {
+  background: linear-gradient(to right, #FF416C, #FF4B2B);
+  border: none;
+  box-shadow: 0 2px 10px rgba(255, 75, 43, 0.4);
+}
+
+.navbar-custom:not(.dark-mode) .btn-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--bleu-neon);
+  color: var(--bleu-neon);
+}
+
+/* ===== MODE SOMBRE (inchangé) ===== */
+.navbar-custom.dark-mode {
+  background-color: #1a1a1a !important;
+  border-bottom: 1px solid #333;
+}
+
+.navbar-custom.dark-mode .nav-link {
+  color: #ddd !important;
+}
+
+.navbar-custom.dark-mode .nav-link:hover {
+  color: #fff !important;
+}
+
+/* ===== RÈGLES COMMUNES COMPLÉMENTAIRES ===== */
+.navbar-brand {
+  padding: 0.25rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand img {
+  height: 50px;
+}
+
+.navbar-toggler {
+  padding: 0.25rem 0.5rem;
+  border: none;
+}
+
+/* === MODE SOMBRE COMPLET === */
 body.dark-mode {
   background: linear-gradient(to right, #0f0f0f, #1a1a1a);
   color: #ffffff;
@@ -117,129 +224,7 @@ body.dark-mode {
   background: linear-gradient(to right, #1a1a1a, #0f0f0f);
 }
 
-/* === Structure globale (commune aux deux modes) === */
-html, body, #root {
-  height: 100%;
-  margin: 0;
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
-}
-
-.app-content {
-  flex: 1;
-}
-
-.footer-custom {
-  background: linear-gradient(to right, var(--violet), var(--bleu));
-  color: var(--blanc);
-  position: relative;
-  z-index: 1;
-}
-
-.footer-custom a {
-  color: var(--blanc);
-  font-size: 1.4rem;
-}
-
-.footer-custom a:hover {
-  color: #ddd;
-}
-
-.footer-custom .btn {
-  background-color: var(--blanc);
-  color: var(--violet);
-  border: none;
-  transition: 0.3s ease;
-}
-
-.footer-custom .btn:hover {
-  background-color: var(--violet);
-  color: var(--blanc);
-}
-
-.activities {
-  background: linear-gradient(to right, var(--violet), var(--bleu));
-}
-
-.activity-card {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid #ffffff33;
-  transition: transform 0.3s ease;
-  height: 100%;
-}
-
-.activity-card:hover {
-  transform: translateY(-5px);
-}
-
-.activity-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-/* Navbar Mode Clair */
-.navbar-custom:not(.dark-mode) {
-  background: linear-gradient(135deg, var(--violet-tech) 0%, #5A00A3 100%);
-  border-bottom: 1px solid var(--bleu-neon);
-  box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
-  backdrop-filter: blur(10px);
-}
-
-.navbar-custom:not(.dark-mode) .navbar-brand {
-  font-family: 'Courier New', monospace;
-  font-weight: bold;
-  letter-spacing: 1px;
-  text-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
-}
-
-.navbar-custom:not(.dark-mode) .nav-link {
-  position: relative;
-  margin: 0 10px;
-  padding: 8px 15px !important;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-
-.navbar-custom:not(.dark-mode) .nav-link::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 15px;
-  width: 0;
-  height: 2px;
-  background: var(--bleu-neon);
-  transition: width 0.3s ease;
-}
-
-.navbar-custom:not(.dark-mode) .nav-link:hover {
-  background: rgba(0, 180, 216, 0.1);
-}
-
-.navbar-custom:not(.dark-mode) .nav-link:hover::after {
-  width: calc(100% - 30px);
-}
-
-/* Bouton déconnexion (mode clair) */
-.navbar-custom:not(.dark-mode) .btn-danger {
-  background: linear-gradient(to right, #FF416C, #FF4B2B);
-  border: none;
-  box-shadow: 0 2px 10px rgba(255, 75, 43, 0.4);
-}
-
-/* Bouton theme toggle */
-.navbar-custom:not(.dark-mode) .btn-secondary {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid var(--bleu-neon);
-  color: var(--bleu-neon);
-}
-
-/* Navbar Mode Sombre (inchangée) */
-.navbar-custom.dark-mode {
-  /* Vos styles existants sont préservés */
-  background-color: #1a1a1a !important;
-  border-bottom: 1px solid #333;
+/* Si vous utilisez des transitions pour le dark mode */
+.dark-mode-transition * {
+  transition: background-color 0.3s ease, color 0.2s ease;
 }

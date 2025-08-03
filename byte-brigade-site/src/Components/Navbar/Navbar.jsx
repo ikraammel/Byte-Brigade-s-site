@@ -21,7 +21,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`navbar navbar-expand-lg navbar-dark navbar-custom px-4 ${darkMode ? "dark-mode" : ""}`}>
+    <nav className={`navbar navbar-expand-lg ${darkMode ? "navbar-dark" : "navbar-light"} navbar-custom px-4 ${darkMode ? "dark-mode" : ""}`}>
       <Link className="navbar-brand" to="/">
         <img src="logo1.png" alt="logo" height="50" className="me-2" />
         Byte Brigade
