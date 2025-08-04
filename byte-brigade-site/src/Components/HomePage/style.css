@@ -31,7 +31,7 @@
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
   line-height: 1.2;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .logo {
@@ -55,7 +55,7 @@ h1 {
 .hero-section h1 {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
-  white-space: nowrap;
+  white-space: normal;
   margin-bottom: 0.5rem;
 }
 
