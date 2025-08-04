@@ -1,10 +1,23 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {FaInstagram, FaLinkedin, FaEnvelope, FaArrowUp } from 'react-icons/fa';
+import './style.css';
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 function Footer() {
+  useEffect(() => {
+  const handleScroll = () => {
+    if (window.scrollY > 100) {
+      document.body.classList.add('scrolled');
+    } else {
+      document.body.classList.remove('scrolled');
+    }
+  };
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
   return (
     <footer className="footer-custom text-white text-center py-4 mt-auto">
       <div className="container">
@@ -31,8 +44,7 @@ function Footer() {
       {/* Bouton Haut de page */}
       <button
         onClick={scrollToTop}
-        className="btn btn-primary position-absolute"
-        style={{ bottom: '20px', right: '20px', borderRadius: '50%', padding: '10px 12px' }}
+        className="btn btn-primary scroll-top-button"
         title="Haut de page"
       >
         <FaArrowUp />

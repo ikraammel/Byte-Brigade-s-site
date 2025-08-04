@@ -42,16 +42,15 @@ export default function ConnectedUsers() {
           <tbody>
             {connectedUsers.map((user, index) => (
               <tr key={index}>
-                <td>{user.nom || "—"}</td>
-                <td>{user.prenom || "—"}</td>
-                <td>{user.email || "—"}</td>
-                <td>
-                  {user.lastSeen?.toDate
-                    ? formatRelative(user.lastSeen.toDate(), new Date(), {
-                        locale: fr,
-                      })
-                    : "—"}
+                <td data-label="Nom">{user.nom || "—"}</td>
+                  <td data-label="Prénom">{user.prenom || "—"}</td>
+                  <td data-label="Email">{user.email || "—"}</td>
+                  <td data-label="Dernière activité">
+                    {user.lastSeen?.toDate
+                      ? formatRelative(user.lastSeen.toDate(), new Date(), { locale: fr })
+                      : "—"}
                 </td>
+
               </tr>
             ))}
           </tbody>
