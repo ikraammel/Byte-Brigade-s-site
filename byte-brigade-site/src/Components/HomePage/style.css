@@ -355,11 +355,11 @@ h1 {
 }
 @media (max-width: 768px) {
   .features-section {
-    margin-bottom: 0.5rem !important; /* espace sous les cartes */
+    margin-bottom: 1.5rem !important; /* espace sous les cartes */
   }
 
   .cta-button {
-    margin-top: 0.5rem !important;       /* espace au-dessus du bouton */
+    margin-top: 2rem !important;       /* espace au-dessus du bouton */
     width: 90%;                        /* largeur adaptée au mobile */
     max-width: 320px;                  /* limite largeur max */
   }
