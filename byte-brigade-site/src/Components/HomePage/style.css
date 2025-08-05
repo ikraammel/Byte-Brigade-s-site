@@ -320,3 +320,37 @@ h1 {
     padding-top: 120px; /* Ajoute de l'espace sous le logo */
   }
 }
+.cta-button {
+  background: var(--light);
+  color: var(--primary);
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 2rem auto; /* espace au-dessus et au-dessous */
+  max-width: 300px;  /* limite la largeur max */
+  width: 100%;       /* prend toute la largeur disponible */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Hover reste pareil */
+.cta-button:hover {
+  background: var(--text-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* Responsive : petits écrans */
+@media (max-width: 480px) {
+  .cta-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    max-width: 100%; /* occupe tout l’espace possible */
+    margin: 1.5rem auto;
+  }
+}
+
