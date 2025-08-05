@@ -1,0 +1,315 @@
+.navbar-custom:not(.dark-mode) {
+  background-color: var(--violet-tech);
+  border-bottom: 1px solid var(--bleu-neon);
+}
+.navbar-custom {
+  padding: 0.5rem 1rem; /* Espacement uniforme pour les deux modes */
+}
+
+@media (min-width: 992px) {
+  .navbar-custom .navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.navbar-custom .nav-link {
+  padding: 6px 12px !important; /* Padding identique */
+  margin: 0; /* Suppression des marges supplémentaires */
+  white-space: nowrap;
+}
+
+/* ===== MODE CLAIR (couleurs et effets conservés) ===== */
+.navbar-custom:not(.dark-mode) {
+  background: linear-gradient(135deg, var(--violet-tech) 0%, #5A00A3 100%);
+  border-bottom: 1px solid var(--bleu-neon);
+  box-shadow: 0 4px 20px rgba(123, 44, 191, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-custom:not(.dark-mode) .navbar-brand {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(0, 180, 216, 0.5);
+}
+
+.navbar-custom:not(.dark-mode) .nav-link {
+  color: #fff;
+  position: relative;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.navbar-custom:not(.dark-mode) .nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 15px;
+  width: 0;
+  height: 2px;
+  background: var(--bleu-neon);
+  transition: width 0.3s ease;
+}
+
+.navbar-custom:not(.dark-mode) .nav-link:hover {
+  background: rgba(0, 180, 216, 0.1);
+  color: #00b4d8;
+}
+
+.navbar-custom:not(.dark-mode) .nav-link:hover::after {
+  width: calc(100% - 30px);
+}
+
+.navbar-custom:not(.dark-mode) .btn-danger {
+  background: linear-gradient(to right, #FF416C, #FF4B2B);
+  border: none;
+  box-shadow: 0 2px 10px rgba(255, 75, 43, 0.4);
+}
+
+.navbar-custom:not(.dark-mode) .btn-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--bleu-neon);
+  color: var(--bleu-neon);
+}
+
+/* ===== MODE SOMBRE (inchangé) ===== */
+.navbar-custom.dark-mode {
+  background-color: #1a1a1a !important;
+  border-bottom: 1px solid #333;
+}
+
+.navbar-custom.dark-mode .nav-link {
+  color: #ddd !important;
+}
+
+.navbar-custom.dark-mode .nav-link:hover {
+  color: #fff !important;
+}
+
+/* ===== RÈGLES COMMUNES COMPLÉMENTAIRES ===== */
+.navbar-brand {
+  padding: 0.25rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand img {
+  height: 50px;
+}
+
+.navbar-toggler {
+  padding: 0.25rem 0.5rem;
+  border: none;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-custom .navbar-collapse {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .navbar-custom .nav-item {
+    width: 100%;
+  }
+  
+  .navbar-custom .nav-link, 
+  .navbar-custom .btn {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem !important;
+    margin: 0.25rem 0;
+  }
+  
+  .navbar-custom .btn-secondary {
+    margin-left: 0 !important;
+  }
+}
+/* Point de rupture personnalisé à 1120px */
+@media (min-width: 1120px) {
+  .navbar-expand-xxl {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+  .navbar-expand-xxl .navbar-nav {
+    flex-direction: row;
+  }
+  .navbar-expand-xxl .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+  }
+  .navbar-expand-xxl .navbar-toggler {
+    display: none;
+  }
+}
+
+.features-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+}
+
+/* Adaptation responsive */
+@media (max-width: 1199px) {
+  .features-section {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .features-section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+    padding: 1.5rem;
+  }
+  
+  .feature-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .features-section {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+  
+  .feature-card {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .features-section {
+    padding: 1rem;
+  }
+  
+  .feature-card {
+    padding: 1.2rem 0.8rem;
+  }
+}
+
+
+@media (min-width: 1120px) {
+  .mobile-buttons {
+    display: none;
+  }
+
+  .navbar-nav {
+    gap: 0.5rem;
+  }
+
+  .navbar-custom .btn {
+    padding: 0.375rem 0.75rem;
+    white-space: nowrap;
+  }
+}
+/* Styles pour la navbar */
+.navbar-custom {
+  padding: 0.5rem 1rem;
+}
+
+/* Boutons en mode desktop */
+@media (min-width: 1120px) {
+  .navbar-nav {
+    gap: 0.75rem;
+  }
+  
+  .navbar-custom .btn {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+  }
+}
+
+/* Styles communs */
+.navbar-custom .btn-danger {
+  background: linear-gradient(to right, #FF416C, #FF4B2B);
+  border: none;
+}
+
+.navbar-custom .btn-secondary {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--bleu-neon);
+}
+
+/* Mode sombre */
+.navbar-custom.dark-mode .btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #555;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-custom .nav-link {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem !important;
+    margin: 0.25rem 0;
+  }
+  
+  .navbar-custom .btn {
+    width: auto;
+    min-width: 120px;
+    text-align: center;
+    margin: 0.25rem auto;
+  }
+}
+@media (max-width: 991.98px) {
+  .navbar-custom .navbar-nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .navbar-custom .btn-secondary {
+    text-align: center;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem 0;
+  }
+}
+
+/* Styles pour le mode desktop */
+@media (min-width: 1120px) {
+  .navbar-custom .btn {
+    padding: 0.375rem 0.75rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 1120px) {
+  .navbar-custom .navbar-nav {
+    flex-direction: column;
+    align-items: center; /* ✅ CENTRE les items */
+    gap: 0.5rem;
+  }
+
+  .navbar-custom .nav-item {
+    width: auto;
+    text-align: center;
+  }
+
+  .navbar-custom .nav-link,
+  .navbar-custom .btn {
+    width: auto;
+    min-width: 120px;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem 0;
+  }
+}
+
+
+
