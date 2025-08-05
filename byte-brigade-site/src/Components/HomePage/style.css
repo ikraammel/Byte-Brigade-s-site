@@ -174,11 +174,14 @@ h1 {
 
 /* Responsive */
 @media (max-width: 992px) {
-  .hero-section {  
-    padding-top: 40px;
+  @media (max-width: 992px) {
+  .hero-section {
+    padding-top: 80px;
     max-width: 80%;
-    margin: -50px auto 0;
+    margin: 0 auto;
   }
+}
+
   .logo-electric {
     position: relative;
     right: auto;
@@ -303,5 +306,17 @@ h1 {
   .features-section {
     grid-template-columns: 1fr;
      max-width: 95%;
+  }
+}
+@media (min-width: 993px) and (max-width: 1200px) {
+  .logo-electric {
+    top: 20px;
+    right: 10px;
+    width: 100px;
+    height: 100px;
+  }
+
+  .hero-section {
+    padding-top: 120px; /* Ajoute de l'espace sous le logo */
   }
 }
