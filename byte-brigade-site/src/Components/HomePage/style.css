@@ -24,16 +24,21 @@
 }
 
 .hero-section {
-  max-width: 100%;
-  margin: 0 auto;
+  max-width: 60%;
   padding: 2rem 1rem;
   text-align: center;
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
   line-height: 1.2;
   white-space: normal;
-}
-
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 0;
+  position: relative;
+  z-index: 2;
+  
+} 
 .logo {
   height: 120px;
   margin-bottom: 1.5rem;
@@ -184,15 +189,6 @@ h1 {
   overflow: hidden;
 }
 
-.hero-section {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-  padding-top: 100px; /* Espace pour le logo */
-  position: relative;
-  z-index: 2;
-}
-
 .logo-top-right {
   position: absolute;
   right: 50px;
@@ -259,15 +255,6 @@ h1 {
     border-color: var(--violet-tech);
   }
 }
-
-/* Ajustements du contenu */
-.hero-section {
-  max-width: 70%;
-  margin: 0 auto;
-  padding-top: 80px;
-  text-align: center;
-}
-
 /* Responsive */
 @media (max-width: 992px) {
   .hero-section {
@@ -296,15 +283,6 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.hero-section {
-  text-align: center;
-  max-width: 60%;
-  margin: -80px auto 0 5%; /* Texte remonté et centré */
-  padding-top: 0;
-  position: relative;
-  z-index: 2;
 }
 
 /* Style unifié pour le logo */

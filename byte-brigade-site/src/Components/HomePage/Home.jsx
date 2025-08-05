@@ -3,12 +3,12 @@ import './style.css';
 import { useContext } from 'react';
 import { AuthContext } from '../AuthContext';
 
+
 function Home() {
   const { darkMode } = useContext(AuthContext);
   
  return (
     <div className={`home-container ${darkMode ? 'dark-mode' : ''}`}>
-      {/* Logo en position absolute à droite */}
       <div className="logo-electric">
         <img 
           src="logo1.png" 
@@ -16,15 +16,13 @@ function Home() {
           className="logo" 
         />
       </div>
-      <div className="hero-center-wrapper">
-        <div className="hero-section">
-          <h1>
-            Bienvenue au <span className="highlight">Club&nbsp;Byte&nbsp;Brigade</span>
-          </h1>
-          <p className="subtitle">
-            Le club informatique de l'ENSAS, où passion et technologie se rencontrent.
-          </p>
-        </div>
+      <div className="hero-section">
+        <h1>
+          Bienvenue au <span className="highlight">Club Byte Brigade</span>
+        </h1>
+        <p className="subtitle">
+          Le club informatique de l'ENSAS, où passion et technologie se rencontrent.
+        </p>
       </div>
       <div className="features-section">
         <div className="feature-card">
