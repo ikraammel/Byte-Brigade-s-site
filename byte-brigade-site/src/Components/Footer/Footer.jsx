@@ -24,7 +24,7 @@ function Footer() {
         <p className="mb-2">© {new Date().getFullYear()} Byte Brigade – Tous droits réservés.</p>
         <p className="mb-3">Conçu avec ❤️ par le Club Informatique Byte Brigade</p>
         <div className="d-flex justify-content-center gap-3">
-          <a href="mailto:bytebrigadeclub@gmail.com" className="text-white" title="Email du club">
+          <a href="mailto:bytebrigadeclub@gmail.com" className="text-white fs-5" title="Email du club">
             <FaEnvelope />
           </a>
           <a
