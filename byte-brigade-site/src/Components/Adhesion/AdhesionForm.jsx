@@ -16,10 +16,11 @@ export default function AdhesionForm() {
     niveau: '',
     passionne: '',
     competences: [],
+    autreCompetence: '',
     commentaires: ''
   });
 
-  const competencesOptions = ["Design", "Gestion de projet", "Travail en équipe", "Informatique"];
+  const competencesOptions = ["Design", "Gestion de projet", "Travail en équipe", "Informatique","Autres"];
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -47,8 +48,15 @@ export default function AdhesionForm() {
       // Enregistrement dans Firestore
       await addDoc(collection(db, "demandesAdhesion"), {
         ...formData,
+        competences: formData.autreCompetence 
+          ? [...formData.competences.filter(c => c !== "Autres"), formData.autreCompetence]
+          : formData.competences,
         timestamp: Timestamp.now()
       });
+
+      const competencesFinales = formData.autreCompetence
+        ? [...formData.competences.filter(c => c !== "Autres"), formData.autreCompetence]
+        : formData.competences;
 
       // Envoi email au candidat
       await emailjs.send(
@@ -72,18 +80,18 @@ export default function AdhesionForm() {
           from_name: `${formData.prenom} ${formData.nom}`,
           to_email: "bytebrigadeclub@gmail.com",
           message: `
-Nouvelle demande d’adhésion reçue :
+                    Nouvelle demande d’adhésion reçue :
 
-Nom : ${formData.nom}
-Prénom : ${formData.prenom}
-Email : ${formData.email}
-Téléphone : ${formData.tel}
-Motivation : ${formData.motivation}
-Sexe : ${formData.sexe}
-Niveau : ${formData.niveau}
-Passionné : ${formData.passionne}
-Compétences : ${formData.competences.join(", ")}
-Commentaires : ${formData.commentaires}
+                    Nom : ${formData.nom}
+                    Prénom : ${formData.prenom}
+                    Email : ${formData.email}
+                    Téléphone : ${formData.tel}
+                    Motivation : ${formData.motivation}
+                    Sexe : ${formData.sexe}
+                    Niveau : ${formData.niveau}
+                    Passionné : ${formData.passionne}
+                    Compétences : ${competencesFinales.join(", ")}
+                    Commentaires : ${formData.commentaires}
           `,
         },
         '5ClTGt_8TWjsxfOAJ'
@@ -100,6 +108,7 @@ Commentaires : ${formData.commentaires}
         niveau: '',
         passionne: '',
         competences: [],
+        autreCompetence: '', 
         commentaires: ''
       });
 
@@ -194,18 +203,14 @@ Commentaires : ${formData.commentaires}
         </div>
 
         <div className="mb-3">
-          Êtes-vous passionné(e) par l’informatique ?
-          <select
+          <textarea
             name="passionne"
             value={formData.passionne}
             onChange={handleChange}
-            className="form-select"
+            className="form-control"
+            placeholder="Que connaissez-vous en informatique ?"
             required
-          >
-            <option value="">-- Choisir --</option>
-            <option value="Oui">Oui</option>
-            <option value="Non">Non</option>
-          </select>
+          />
         </div>
 
         <div className="mb-3">
@@ -222,6 +227,17 @@ Commentaires : ${formData.commentaires}
                 />
                 {" "}{comp}
               </label>
+
+              {comp === "Autres" && formData.competences.includes("Autres") && (
+                <input
+                  type="text"
+                  name="autreCompetence"
+                  value={formData.autreCompetence}
+                  onChange={handleChange}
+                  placeholder="Précisez vos compétences"
+                  className="form-control mt-2"
+                />
+              )}
             </div>
           ))}
         </div>
