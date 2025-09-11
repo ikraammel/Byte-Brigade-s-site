@@ -48,13 +48,13 @@ export default function AdhesionForm() {
     try {
       // Enregistrement dans Firestore
       await addDoc(collection(db, "demandesAdhesion"), {
-        userId: auth.currentUser.uid, // ← important pour les règles
         ...formData,
         competences: formData.autreCompetence 
           ? [...formData.competences.filter(c => c !== "Autres"), formData.autreCompetence]
           : formData.competences,
         timestamp: Timestamp.now()
       });
+
 
       const competencesFinales = formData.autreCompetence
         ? [...formData.competences.filter(c => c !== "Autres"), formData.autreCompetence]
