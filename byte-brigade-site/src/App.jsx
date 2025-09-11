@@ -71,7 +71,14 @@ import ConnectedUsers from "./Components/Dashboard/ConnectedUsers";
                   <Route path="/register" element={<Register />} />
                   <Route path="/membres" element={<Membres />} />
                   <Route path="/activites" element={<Activites />} />
-                  <Route path="/dashboard" element={<ConnectedUsers />} />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRouteAdmin>
+                        <ConnectedUsers />
+                      </ProtectedRouteAdmin>
+                    }
+                  />
                   <Route
                     path="/admin"
                     element={

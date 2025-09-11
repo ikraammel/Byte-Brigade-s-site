@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../Firebase/Firebase";
 import { formatRelative } from "date-fns";
 import { fr } from "date-fns/locale";
+import { AuthContext } from "../AuthContext";
 import './ConnectedUsers.css';
 
 export default function ConnectedUsers() {
   const [connectedUsers, setConnectedUsers] = useState([]);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
+    if (!currentUser || currentUser.role !== "admin") return;
+
     const q = collection(db, "connectedUsers");
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const allUsers = snapshot.docs.map((doc) => ({
@@ -26,7 +30,16 @@ export default function ConnectedUsers() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [currentUser]);
+
+  // Sécurité supplémentaire (au cas où la route serait mal protégée)
+  if (!currentUser || currentUser.role !== "admin") {
+    return (
+      <p className="text-center text-danger">
+        ⛔ Accès réservé aux administrateurs
+      </p>
+    );
+  }
 
   return (
     <div className="connected-users-container">

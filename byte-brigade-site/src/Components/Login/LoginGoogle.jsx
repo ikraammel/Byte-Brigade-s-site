@@ -46,9 +46,9 @@ function LoginGoogle() {
       const connectedUserRef = doc(db, 'connectedUsers', user.uid);
       await setDoc(connectedUserRef, {
         uid: user.uid,
-        email: user.email,
-        nom: userData.nom,
-        prenom: userData.prenom,
+        email: user.email || "",
+        nom: userData?.nom || "",
+        prenom: userData?.prenom || "",
         isOnline: true,
         lastSeen: serverTimestamp(),
       });
