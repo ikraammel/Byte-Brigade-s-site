@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
 import { auth, db } from "../Firebase/Firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import LoginGoogle from "./LoginGoogle";
@@ -50,6 +50,15 @@ function Login() {
     }
 
     try {
+      // Vérifier si cet email est lié à Google
+      const methods = await fetchSignInMethodsForEmail(auth, email);
+      if (methods.includes("google.com")) {
+        setError("Cet email est utilisé avec Google. Connectez-vous via Google.");
+        setLoading(false);
+        return;
+      }
+
+      // Connexion normale
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
@@ -120,7 +129,6 @@ function Login() {
           <input
             type="email"
             className="form-control"
-            placeholder="exemple@ens.ma"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -130,7 +138,6 @@ function Login() {
           <input
             type={showPassword ? "text" : "password"}
             className="form-control"
-            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -148,7 +155,6 @@ function Login() {
               cursor: "pointer",
               fontSize: "20px",
             }}
-            aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
           >
             {showPassword ? "🙈" : "👁️"}
           </button>
