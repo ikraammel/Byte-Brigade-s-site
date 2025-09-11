@@ -55,11 +55,12 @@ function LoginGoogle() {
 
       const userInfo = {
         email: user.email,
-        role: userData.role,
-        nom: userData.nom,
-        prenom: userData.prenom,
+        role: userData.role || "user", // valeur par défaut
+        nom: userData.nom || "",
+        prenom: userData.prenom || "",
         displayName: user.displayName,
       };
+
 
       localStorage.setItem('user', JSON.stringify(userInfo));
       setCurrentUser(userInfo);

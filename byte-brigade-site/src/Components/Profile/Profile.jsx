@@ -34,7 +34,7 @@ function Profile() {
     <div className="container mt-5">
       <h1>Profil de {user.prenom} {user.nom}</h1>
       <p>Email : {user.email}</p>
-      <p>Rôle : {user.role}</p>
+      <p>Rôle : {user.role || "Utilisateur"}</p>
 
       <button className="btn btn-danger mt-3" onClick={handleLogout}>
         Se déconnecter

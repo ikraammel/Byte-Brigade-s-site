@@ -81,14 +81,20 @@ export default function Navbar() {
                   👤 {currentUser.prenom || currentUser.displayName || "Profil"}
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/dashboard" onClick={closeNavbar}>Dashboard</Link>
-              </li>
               {currentUser.role === "admin" && (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/admin" onClick={closeNavbar}>⚙️ Admin</Link>
-                </li>
-              )}
+            <>
+              <li className="nav-item">
+                <Link className="nav-link" to="/dashboard" onClick={closeNavbar}>
+                  📊 Dashboard
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/admin" onClick={closeNavbar}>
+                  ⚙️ Admin
+                </Link>
+              </li>
+            </>
+          )}
             </>
           ) : (
             <>
