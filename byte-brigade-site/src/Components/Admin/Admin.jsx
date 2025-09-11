@@ -3,21 +3,27 @@ import { db } from '../Firebase/Firebase';
 import { collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import AjoutCours from './AjoutCours';
 import { toast } from 'react-toastify';
-import './style.css'
+import './style.css';
 
 function Admin() {
   // Cours
   const [cours, setCours] = useState([]);
   const [loadingCours, setLoadingCours] = useState(true);
+
   // Demandes adhésion
   const [demandes, setDemandes] = useState([]);
   const [loadingDemandes, setLoadingDemandes] = useState(true);
+
+  // Utilisateurs
+  const [users, setUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [filter, setFilter] = useState("all"); // "all" | "approved" | "pending"
 
   // Edition cours
   const [editId, setEditId] = useState(null);
   const [editTitre, setEditTitre] = useState('');
 
-  // Récupérer cours
+  // 📌 Récupérer cours
   useEffect(() => {
     async function fetchCours() {
       setLoadingCours(true);
@@ -34,7 +40,7 @@ function Admin() {
     fetchCours();
   }, []);
 
-  // Récupérer demandes adhésion
+  // 📌 Récupérer demandes adhésion
   useEffect(() => {
     async function fetchDemandes() {
       setLoadingDemandes(true);
@@ -51,23 +57,38 @@ function Admin() {
     fetchDemandes();
   }, []);
 
-  // Confirmer avec toast avant suppression (cours)
-  const handleDelete = async (id) => {
-    if (window.confirm) {
-      // Pour garder une confirmation simple, tu peux remplacer par un vrai toast confirm plus avancé (bibliothèques externes)
-      if (!window.confirm("Voulez-vous vraiment supprimer ce cours ?")) return;
+  // 📌 Récupérer utilisateurs
+  useEffect(() => {
+    async function fetchUsers() {
+      setLoadingUsers(true);
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setUsers(data);
+      } catch (error) {
+        console.error("Erreur récupération utilisateurs :", error);
+        toast.error("Erreur lors de la récupération des utilisateurs");
+      }
+      setLoadingUsers(false);
     }
-    try {
-      await deleteDoc(doc(db, "cours", id));
-      setCours(cours.filter(c => c.id !== id));
-      toast.success("Cours supprimé avec succès !");
-    } catch (error) {
-      console.error("Erreur suppression : ", error);
-      toast.error("Erreur lors de la suppression.");
+    fetchUsers();
+  }, []);
+
+  // 📌 Supprimer cours
+  const handleDelete = async (id) => {
+    if (window.confirm("Voulez-vous vraiment supprimer ce cours ?")) {
+      try {
+        await deleteDoc(doc(db, "cours", id));
+        setCours(cours.filter(c => c.id !== id));
+        toast.success("Cours supprimé avec succès !");
+      } catch (error) {
+        console.error("Erreur suppression : ", error);
+        toast.error("Erreur lors de la suppression.");
+      }
     }
   };
 
-  // Edition cours
+  // 📌 Edition cours
   const startEdit = (id, titre) => {
     setEditId(id);
     setEditTitre(titre);
@@ -93,20 +114,38 @@ function Admin() {
     }
   };
 
-  // Supprimer demande adhésion avec toast
+  // 📌 Supprimer demande adhésion
   const handleDeleteDemande = async (id) => {
-    if (window.confirm) {
-      if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette demande ?")) return;
-    }
-    try {
-      await deleteDoc(doc(db, "demandesAdhesion", id));
-      setDemandes(demandes.filter(d => d.id !== id));
-      toast.success("Demande supprimée avec succès !");
-    } catch (error) {
-      console.error("Erreur lors de la suppression de la demande :", error);
-      toast.error("Erreur lors de la suppression.");
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette demande ?")) {
+      try {
+        await deleteDoc(doc(db, "demandesAdhesion", id));
+        setDemandes(demandes.filter(d => d.id !== id));
+        toast.success("Demande supprimée avec succès !");
+      } catch (error) {
+        console.error("Erreur lors de la suppression de la demande :", error);
+        toast.error("Erreur lors de la suppression.");
+      }
     }
   };
+
+  // 📌 Approuver ou bloquer un utilisateur
+  const handleApproval = async (userId, newStatus) => {
+    try {
+      await updateDoc(doc(db, "users", userId), { isApproved: newStatus });
+      setUsers(users.map(u => u.id === userId ? { ...u, isApproved: newStatus } : u));
+      toast.success(`Utilisateur ${newStatus ? "approuvé" : "bloqué"} avec succès !`);
+    } catch (error) {
+      console.error("Erreur mise à jour approbation :", error);
+      toast.error("Erreur lors de la mise à jour.");
+    }
+  };
+
+  // 📌 Filtrer les utilisateurs
+  const filteredUsers = users.filter(user => {
+    if (filter === "approved") return user.isApproved;
+    if (filter === "pending") return !user.isApproved;
+    return true;
+  });
 
   return (
     <div className="container mt-5">
@@ -151,6 +190,7 @@ function Admin() {
         )}
       </section>
 
+      {/* Section Demandes d'adhésion */}
       <div style={{ width: '100%', overflowX: 'auto' }}>
         <div className="demandes-container">
           <h2>Demandes d'adhésion reçues</h2>
@@ -206,6 +246,67 @@ function Admin() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Section Gestion des utilisateurs */}
+      <div className="users-container mt-5">
+        <h2>Gestion des utilisateurs</h2>
+        <div className="mb-3">
+          <label>Filtrer : </label>
+          <select value={filter} onChange={e => setFilter(e.target.value)} className="ms-2">
+            <option value="all">Tous</option>
+            <option value="approved">Approuvés</option>
+            <option value="pending">En attente</option>
+          </select>
+        </div>
+        {loadingUsers ? (
+          <p>Chargement des utilisateurs...</p>
+        ) : filteredUsers.length === 0 ? (
+          <p>Aucun utilisateur trouvé.</p>
+        ) : (
+          <div className="table-responsive mt-4">
+            <table className="users-table">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Prénom</th>
+                  <th>Email</th>
+                  <th>Rôle</th>
+                  <th>Statut</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredUsers.map(user => (
+                  <tr key={user.id}>
+                    <td>{user.nom}</td>
+                    <td>{user.prenom}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>{user.isApproved ? "✅ Approuvé" : "⛔ En attente"}</td>
+                    <td>
+                      {!user.isApproved ? (
+                        <button
+                          onClick={() => handleApproval(user.id, true)}
+                          className="btn btn-success btn-sm"
+                        >
+                          Approuver
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleApproval(user.id, false)}
+                          className="btn btn-warning btn-sm"
+                        >
+                          Bloquer
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

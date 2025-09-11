@@ -67,8 +67,15 @@ function Login() {
 
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
-        const role = userData.role;
 
+        // 🚨 Vérification isApproved
+        if (!userData.isApproved) {
+          setError("Votre compte est en attente d'approbation par un administrateur.");
+          setLoading(false);
+          return; // on stoppe la connexion
+        }
+
+        const role = userData.role;
         const userInfo = {
           email,
           role,
@@ -89,7 +96,8 @@ function Login() {
           toast.success("Connexion réussie");
           navigate("/cours");
         }
-      } else {
+      }
+ else {
         setError("Aucun rôle défini pour cet utilisateur.");
       }
     } catch (error) {
@@ -128,6 +136,7 @@ function Login() {
           <label className="form-label text-white">Email</label>
           <input
             type="email"
+            placeholder="Votre email ..."
             className="form-control"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -135,8 +144,10 @@ function Login() {
         </div>
 
         <div className="position-relative mb-3">
+          <label className="form-label text-white">Mot de passe</label>
           <input
             type={showPassword ? "text" : "password"}
+            placeholder="Votre mot de passe ..."
             className="form-control"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -147,7 +158,7 @@ function Login() {
             style={{
               position: "absolute",
               right: "10px",
-              top: "50%",
+              top: "70%",
               transform: "translateY(-50%)",
               background: "none",
               border: "none",
