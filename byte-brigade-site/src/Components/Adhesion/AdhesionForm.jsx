@@ -4,6 +4,7 @@ import emailjs from '@emailjs/browser';
 import { db } from "../Firebase/Firebase";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { auth } from "../Firebase/Firebase"; 
 
 export default function AdhesionForm() {
   const [formData, setFormData] = useState({
@@ -47,6 +48,7 @@ export default function AdhesionForm() {
     try {
       // Enregistrement dans Firestore
       await addDoc(collection(db, "demandesAdhesion"), {
+        userId: auth.currentUser.uid, // ← important pour les règles
         ...formData,
         competences: formData.autreCompetence 
           ? [...formData.competences.filter(c => c !== "Autres"), formData.autreCompetence]
