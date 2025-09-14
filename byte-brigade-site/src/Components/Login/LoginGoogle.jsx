@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'firebase/auth';
 import { auth, db } from '../Firebase/Firebase';
-import { doc, getDocs, collection, query, where, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { AuthContext } from '../AuthContext';
 import { toast } from 'react-toastify';
 
@@ -12,112 +12,87 @@ function LoginGoogle() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const provider = new GoogleAuthProvider();
+
+  // 1️⃣ Lancer la redirection Google
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError('');
-    const provider = new GoogleAuthProvider();
-
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      // Chercher le doc users par email
-      const usersRef = collection(db, 'users');
-      const q = query(usersRef, where("email", "==", user.email));
-      const querySnapshot = await getDocs(q);
-
-      let userData;
-      let userDocId;
-
-      if (!querySnapshot.empty) {
-        // Document existant
-        const docSnap = querySnapshot.docs[0];
-        userData = docSnap.data();
-        userDocId = docSnap.id;
-        console.log("🔥 userData:", userData);
-      } else {
-        // Première connexion : créer document
-        const fullName = user.displayName || '';
-        const nameParts = fullName.split(' ');
-        const prenom = nameParts[0] || '';
-        const nom = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-
-        const newUserRef = doc(db, "users", user.uid); // doc avec UID
-        await setDoc(newUserRef, {
-          uid: user.uid,
-          email: user.email,
-          role: "user",
-          prenom,
-          nom,
-          isApproved: false,
-          createdAt: serverTimestamp(),
-        });
-
-
-        toast.info("Votre compte sera approuvé par un administrateur.");
-        setLoading(false);
-        return;
-      }
-
-      // Vérifier isApproved
-      if (!userData.isApproved) {
-        setError("Votre compte est en attente d’approbation par un administrateur.");
-        toast.error("Votre compte est en attente de validation.");
-        setLoading(false);
-        return;
-      }
-
-      // Mettre à jour statut en ligne
-      const connectedUserRef = doc(db, 'connectedUsers', user.uid);
-      await setDoc(connectedUserRef, {
-        uid: user.uid,
-        email: user.email || '',
-        nom: userData.nom || '',
-        prenom: userData.prenom || '',
-        isOnline: true,
-        lastSeen: serverTimestamp(),
-      });
-
-      // Préparer userInfo pour contexte et localStorage
-      const userInfo = {
-        email: user.email,
-        role: userData.role || 'user',
-        nom: userData.nom || '',
-        prenom: userData.prenom || '',
-        displayName: user.displayName || `${userData.prenom} ${userData.nom}`,
-      };
-
-      localStorage.setItem('user', JSON.stringify(userInfo));
-      setCurrentUser(userInfo);
-
-      toast.success(`Bienvenue ${user.displayName || userInfo.displayName}`);
-      navigate(userData.role === 'admin' ? '/admin' : '/cours');
-
+      await signInWithRedirect(auth, provider);
     } catch (err) {
-      console.error('Erreur Google Auth :', err);
-
-      switch (err.code) {
-        case 'auth/popup-closed-by-user':
-          setError('Connexion annulée. La fenêtre a été fermée.');
-          toast.error('Connexion annulée.');
-          break;
-        case 'auth/network-request-failed':
-          setError('Problème de connexion. Vérifiez votre connexion Internet.');
-          toast.error('Problème réseau.');
-          break;
-        case 'auth/popup-blocked':
-          setError('La fenêtre contextuelle a été bloquée. Autorisez les pop-ups.');
-          toast.error('Pop-up bloquée.');
-          break;
-        default:
-          setError('Une erreur est survenue : ' + err.message);
-          toast.error('Erreur : ' + err.message);
-          break;
-      }
-    } finally {
+      console.error("Erreur Google Auth :", err);
+      setError("Erreur : " + err.message);
+      toast.error("Erreur : " + err.message);
       setLoading(false);
     }
   };
+
+  // 2️⃣ Récupérer le résultat après redirection
+  useEffect(() => {
+    const fetchRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (!result) return;
+
+        const user = result.user;
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          // Première connexion → créer le doc
+          const fullName = user.displayName || "";
+          const nameParts = fullName.split(" ");
+          const prenom = nameParts[0] || "";
+          const nom = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
+
+          await setDoc(userRef, {
+            uid: user.uid,
+            email: user.email,
+            prenom,
+            nom,
+            role: "user",
+            isApproved: false,
+            createdAt: serverTimestamp(),
+          });
+
+          toast.info("Votre compte sera approuvé par un administrateur.");
+          setLoading(false);
+          return;
+        }
+
+        const userData = userSnap.data();
+
+        if (!userData.isApproved) {
+          setError("Votre compte est en attente d’approbation par un administrateur.");
+          toast.error("Votre compte est en attente de validation.");
+          setLoading(false);
+          return;
+        }
+
+        // Stocker l’utilisateur connecté
+        const userInfo = {
+          email: user.email,
+          role: userData.role || 'user',
+          nom: userData.nom || '',
+          prenom: userData.prenom || '',
+          displayName: user.displayName || `${userData.prenom} ${userData.nom}`,
+        };
+
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        setCurrentUser(userInfo);
+
+        toast.success(`Bienvenue ${userInfo.displayName}`);
+        navigate(userData.role === 'admin' ? '/admin' : '/cours');
+      } catch (err) {
+        console.error("Erreur Redirect Google :", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRedirectResult();
+  }, [navigate, setCurrentUser]);
 
   return (
     <>
