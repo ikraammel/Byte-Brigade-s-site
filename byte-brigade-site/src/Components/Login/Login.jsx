@@ -45,7 +45,7 @@ function Login() {
 
     if (!email || !password) {
       setError("Veuillez remplir tous les champs");
-      setLoading(false)
+      setLoading(false);
       return;
     }
 
@@ -65,41 +65,54 @@ function Login() {
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnap = await getDoc(userDocRef);
 
-      if (userDocSnap.exists()) {
-        const userData = userDocSnap.data();
+      if (!userDocSnap.exists()) {
+        // Première connexion → créer le document Firestore
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          email: user.email,
+          nom: "",
+          prenom: "",
+          role: "user",
+          isApproved: false,
+          createdAt: serverTimestamp(),
+        });
 
-        // 🚨 Vérification isApproved
-        if (!userData.isApproved) {
-          setError("Votre compte est en attente d'approbation par un administrateur.");
-          setLoading(false);
-          return; // on stoppe la connexion
-        }
-
-        const role = userData.role;
-        const userInfo = {
-          email,
-          role,
-          nom: userData.nom,
-          prenom: userData.prenom,
-          displayName: `${userData.prenom} ${userData.nom}`,
-        };
-
-        localStorage.setItem("user", JSON.stringify(userInfo));
-        setCurrentUser(userInfo);
-
-        await updateOnlineStatus(user, userData);
-
-        if (role === "admin") {
-          toast.success("Connexion réussie en tant qu'admin");
-          navigate("/admin");
-        } else {
-          toast.success("Connexion réussie");
-          navigate("/cours");
-        }
+        setError("Votre compte a été créé et est en attente d'approbation par un administrateur.");
+        setLoading(false);
+        return;
       }
- else {
-        setError("Aucun rôle défini pour cet utilisateur.");
+
+      const userData = userDocSnap.data();
+
+      // Vérification isApproved
+      if (!userData.isApproved) {
+        setError("Votre compte est en attente d'approbation par un administrateur.");
+        setLoading(false);
+        return;
       }
+
+      const role = userData.role;
+      const userInfo = {
+        email,
+        role,
+        nom: userData.nom,
+        prenom: userData.prenom,
+        displayName: `${userData.prenom} ${userData.nom}`,
+      };
+
+      localStorage.setItem("user", JSON.stringify(userInfo));
+      setCurrentUser(userInfo);
+
+      await updateOnlineStatus(user, userData);
+
+      if (role === "admin") {
+        toast.success("Connexion réussie en tant qu'admin");
+        navigate("/admin");
+      } else {
+        toast.success("Connexion réussie");
+        navigate("/cours");
+      }
+
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
       switch (error.code) {

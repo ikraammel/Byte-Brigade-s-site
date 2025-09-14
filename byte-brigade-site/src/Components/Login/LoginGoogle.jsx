@@ -42,15 +42,17 @@ function LoginGoogle() {
         const prenom = nameParts[0] || '';
         const nom = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
-        const newUserRef = doc(usersRef); // nouveau doc auto-ID
+        const newUserRef = doc(db, "users", user.uid); // doc avec UID
         await setDoc(newUserRef, {
+          uid: user.uid,
           email: user.email,
-          role: 'user',
+          role: "user",
           prenom,
           nom,
           isApproved: false,
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
         });
+
 
         toast.info("Votre compte sera approuvé par un administrateur.");
         setLoading(false);
