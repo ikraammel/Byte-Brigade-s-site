@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../Firebase/Firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { AuthContext } from '../AuthContext';
@@ -66,7 +66,7 @@ function LoginGoogle() {
     navigate(userData.role === 'admin' ? '/admin' : '/cours');
   };
 
-  // Lancer la connexion Google
+  // Fonction de connexion Google
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError('');
@@ -89,7 +89,7 @@ function LoginGoogle() {
     }
   };
 
-  // Récupérer le résultat après redirection (mobile)
+  // Vérifier le résultat après redirection (mobile)
   useEffect(() => {
     const fetchRedirectResult = async () => {
       try {
@@ -99,11 +99,19 @@ function LoginGoogle() {
         }
       } catch (err) {
         console.error('Erreur Redirect Google :', err);
-      } finally {
-        setLoading(false);
       }
     };
     fetchRedirectResult();
+  }, [navigate, setCurrentUser]);
+
+  // Vérifier si l'utilisateur est déjà connecté
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await handleUserAfterLogin(user);
+      }
+    });
+    return () => unsubscribe();
   }, [navigate, setCurrentUser]);
 
   return (
