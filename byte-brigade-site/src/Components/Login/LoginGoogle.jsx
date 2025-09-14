@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth, db } from '../Firebase/Firebase';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDocs, collection, query, where, setDoc, serverTimestamp } from 'firebase/firestore';
 import { AuthContext } from '../AuthContext';
 import { toast } from 'react-toastify';
 
@@ -12,107 +12,110 @@ function LoginGoogle() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const provider = new GoogleAuthProvider();
-
-  // Fonction pour gérer l'utilisateur après connexion
-  const handleUserAfterLogin = async (user) => {
-    const userRef = doc(db, 'users', user.uid);
-    const userSnap = await getDoc(userRef);
-
-    if (!userSnap.exists()) {
-      // Première connexion → créer le doc
-      const fullName = user.displayName || '';
-      const nameParts = fullName.split(' ');
-      const prenom = nameParts[0] || '';
-      const nom = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-
-      await setDoc(userRef, {
-        uid: user.uid,
-        email: user.email,
-        prenom,
-        nom,
-        role: 'user',
-        isApproved: false,
-        createdAt: serverTimestamp(),
-      });
-
-      toast.info('Votre compte sera approuvé par un administrateur.');
-      setLoading(false);
-      return;
-    }
-
-    const userData = userSnap.data();
-
-    if (!userData.isApproved) {
-      setError('Votre compte est en attente d’approbation par un administrateur.');
-      toast.error('Votre compte est en attente de validation.');
-      setLoading(false);
-      return;
-    }
-
-    // Stocker l’utilisateur dans contexte + localStorage
-    const userInfo = {
-      email: user.email,
-      role: userData.role || 'user',
-      nom: userData.nom || '',
-      prenom: userData.prenom || '',
-      displayName: user.displayName || `${userData.prenom} ${userData.nom}`,
-    };
-
-    localStorage.setItem('user', JSON.stringify(userInfo));
-    setCurrentUser(userInfo);
-
-    toast.success(`Bienvenue ${userInfo.displayName}`);
-    navigate(userData.role === 'admin' ? '/admin' : '/cours');
-  };
-
-  // Fonction de connexion Google
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError('');
-    try {
-      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const provider = new GoogleAuthProvider();
 
-      if (isMobile) {
-        // Mobile → redirection
-        await signInWithRedirect(auth, provider);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Chercher le doc users par email
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where("email", "==", user.email));
+      const querySnapshot = await getDocs(q);
+
+      let userData;
+      let userDocId;
+
+      if (!querySnapshot.empty) {
+        // Document existant
+        const docSnap = querySnapshot.docs[0];
+        userData = docSnap.data();
+        userDocId = docSnap.id;
+        console.log("🔥 userData:", userData);
       } else {
-        // Desktop → popup
-        const result = await signInWithPopup(auth, provider);
-        await handleUserAfterLogin(result.user);
+        // Première connexion : créer document
+        const fullName = user.displayName || '';
+        const nameParts = fullName.split(' ');
+        const prenom = nameParts[0] || '';
+        const nom = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+        const newUserRef = doc(usersRef); // nouveau doc auto-ID
+        await setDoc(newUserRef, {
+          email: user.email,
+          role: 'user',
+          prenom,
+          nom,
+          isApproved: false,
+          createdAt: serverTimestamp()
+        });
+
+        toast.info("Votre compte sera approuvé par un administrateur.");
+        setLoading(false);
+        return;
       }
+
+      // Vérifier isApproved
+      if (!userData.isApproved) {
+        setError("Votre compte est en attente d’approbation par un administrateur.");
+        toast.error("Votre compte est en attente de validation.");
+        setLoading(false);
+        return;
+      }
+
+      // Mettre à jour statut en ligne
+      const connectedUserRef = doc(db, 'connectedUsers', user.uid);
+      await setDoc(connectedUserRef, {
+        uid: user.uid,
+        email: user.email || '',
+        nom: userData.nom || '',
+        prenom: userData.prenom || '',
+        isOnline: true,
+        lastSeen: serverTimestamp(),
+      });
+
+      // Préparer userInfo pour contexte et localStorage
+      const userInfo = {
+        email: user.email,
+        role: userData.role || 'user',
+        nom: userData.nom || '',
+        prenom: userData.prenom || '',
+        displayName: user.displayName || `${userData.prenom} ${userData.nom}`,
+      };
+
+      localStorage.setItem('user', JSON.stringify(userInfo));
+      setCurrentUser(userInfo);
+
+      toast.success(`Bienvenue ${user.displayName || userInfo.displayName}`);
+      navigate(userData.role === 'admin' ? '/admin' : '/cours');
+
     } catch (err) {
       console.error('Erreur Google Auth :', err);
-      setError('Erreur : ' + err.message);
-      toast.error('Erreur : ' + err.message);
+
+      switch (err.code) {
+        case 'auth/popup-closed-by-user':
+          setError('Connexion annulée. La fenêtre a été fermée.');
+          toast.error('Connexion annulée.');
+          break;
+        case 'auth/network-request-failed':
+          setError('Problème de connexion. Vérifiez votre connexion Internet.');
+          toast.error('Problème réseau.');
+          break;
+        case 'auth/popup-blocked':
+          setError('La fenêtre contextuelle a été bloquée. Autorisez les pop-ups.');
+          toast.error('Pop-up bloquée.');
+          break;
+        default:
+          setError('Une erreur est survenue : ' + err.message);
+          toast.error('Erreur : ' + err.message);
+          break;
+      }
+    } finally {
       setLoading(false);
     }
   };
-
-  // Vérifier le résultat après redirection (mobile)
-  useEffect(() => {
-    const fetchRedirectResult = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result?.user) {
-          await handleUserAfterLogin(result.user);
-        }
-      } catch (err) {
-        console.error('Erreur Redirect Google :', err);
-      }
-    };
-    fetchRedirectResult();
-  }, [navigate, setCurrentUser]);
-
-  // Vérifier si l'utilisateur est déjà connecté
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await handleUserAfterLogin(user);
-      }
-    });
-    return () => unsubscribe();
-  }, [navigate, setCurrentUser]);
 
   return (
     <>
