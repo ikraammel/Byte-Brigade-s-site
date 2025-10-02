@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../Firebase/Firebase';
-import { collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc, updateDoc ,query,orderBy} from 'firebase/firestore';
 import AjoutCours from './AjoutCours';
 import { toast } from 'react-toastify';
 import './style.css';
@@ -42,20 +42,21 @@ function Admin() {
 
   // 📌 Récupérer demandes adhésion
   useEffect(() => {
-    async function fetchDemandes() {
-      setLoadingDemandes(true);
-      try {
-        const querySnapshot = await getDocs(collection(db, "demandesAdhesion"));
-        const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setDemandes(data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des demandes :", error);
-        toast.error("Erreur lors de la récupération des demandes");
-      }
-      setLoadingDemandes(false);
+  async function fetchDemandes() {
+    setLoadingDemandes(true);
+    try {
+      const q = query(collection(db, "demandesAdhesion"), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setDemandes(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des demandes :", error);
+      toast.error("Erreur lors de la récupération des demandes");
     }
-    fetchDemandes();
-  }, []);
+    setLoadingDemandes(false);
+  }
+  fetchDemandes();
+}, []);
 
   // 📌 Récupérer utilisateurs
   useEffect(() => {
