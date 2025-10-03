@@ -1,0 +1,106 @@
+/* Conteneur principal */
+.actualites-container {
+  margin-top: 40px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Titre principal */
+.title {
+  color: #4b0082; /* Violet tech */
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Texte d’intro */
+.description {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Bouton formulaire */
+.form-btn {
+  display: block;
+  width: fit-content;
+  margin: 0 auto; /* centrer le bouton */
+  background-color: #007bff; /* Bleu bouton */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.form-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Section images */
+.images-row {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+  flex-wrap: wrap; /* permet de passer en colonne sur mobile */
+}
+
+.image-col {
+  text-align: center;
+  flex: 0 1 300px; /* chaque bloc image fait max 300px */
+}
+
+/* Taille des images contrôlée */
+.product-image {
+  width: 300px;   /* largeur identique */
+  height: 300px;  /* même hauteur */
+  object-fit: cover; /* recadre proprement */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.product-image:hover {
+  transform: scale(1.05); /* Zoom léger au survol */
+}
+
+.image-caption {
+  margin-top: 10px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Séparateur */
+.separator {
+  margin: 40px 0;
+  border: none;
+  border-top: 2px solid #ddd;
+}
+
+/* Sous-titre */
+.subtitle {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* Texte autres actualités */
+.other-news {
+  font-size: 1rem;
+  text-align: center;
+  color: #555;
+}
+
+/* Responsive pour petits écrans */
+@media (max-width: 768px) {
+  .product-image {
+    width: 90%;
+    height: auto; /* pour éviter que ça écrase l’image sur mobile */
+  }
+}
