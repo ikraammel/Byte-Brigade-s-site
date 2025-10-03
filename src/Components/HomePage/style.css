@@ -1,0 +1,367 @@
+:root {
+  --primary: #7c4dff;
+  --secondary: #00bcd4;
+  --light: #f5f5f7;
+  --dark: #1a1a1a;
+  --text-light: #ffffff;
+  --text-dark: #333333;
+}
+
+.home-container {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;     /* Centre verticalement */
+  justify-content: center; /* Centre horizontalement */
+  flex-direction: column;
+  background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* Mode sombre */
+.home-container.dark-mode {
+  background: linear-gradient(135deg, #4a148c, #00838f);
+}
+
+.hero-section {
+  max-width: 60%;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: normal;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 0;
+  position: relative;
+  z-index: 2;
+  
+} 
+.logo {
+  height: 120px;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.highlight {
+  color: #ffeb3b;
+  font-weight: 800;
+}
+
+.hero-section h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  white-space: normal;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  font-weight: normal; /* 👈 Assure que ce n'est pas en gras */
+  margin-top: 0.5rem;
+  margin-left: 40px; /* ou autre décalage souhaité */
+  text-align: left; /* si tu veux qu'elle ne soit pas centrée */
+  color: inherit; /* garde la couleur actuelle */
+  font-size: 1rem;
+  font-weight: 500; /* ou "normal" */
+  margin-left: 40px;
+  color: #aaa7a7;
+}
+
+
+
+.features-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  align-items: stretch;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-button {
+  background: var(--light);
+  color: var(--primary);
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.cta-button:hover {
+  background: var(--text-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* Mode sombre spécifique */
+.home-container.dark-mode .feature-card {
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid #333;
+}
+
+.home-container.dark-mode .cta-button {
+  background: var(--text-light);
+  color: var(--dark);
+}
+
+/* Éléments clés plus visibles en mode sombre */
+.dark-mode .home-container {
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--bg-primary) 20%, black 80%),
+    color-mix(in srgb, var(--bg-secondary) 20%, black 80%));
+}
+
+.highlight {
+  color: var(--bg-accent);
+  text-shadow: 0 0 10px rgba(255, 235, 59, 0.3);
+}
+
+.dark-mode .feature-card {
+  background: rgba(30, 30, 30, 0.8);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+  border-color: var(--bg-secondary);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  @media (max-width: 992px) {
+  .hero-section {
+    padding-top: 80px;
+    max-width: 80%;
+    margin: 0 auto;
+  }
+}
+
+  .logo-electric {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 0 auto 30px;
+    width: 160px;
+    height: auto;
+    z-index: 2;
+  }
+
+  .logo-electric::before {
+    width: 210px;
+    height: 210px;
+    top: -20px;
+    left: -20px;
+  }
+}
+
+@keyframes particleMove {
+  from { background-position: 0 0; }
+  to { background-position: 100px 100px; }
+}
+
+/* Mode sombre */
+.dark-mode::before {
+  background: 
+    radial-gradient(circle, var(--violet-tech) 1px, transparent 2px) 0 0 / 20px 20px;
+}
+
+/* Flottement + lueur animée */
+@keyframes floatAndGlow {
+  0%, 100% {
+    transform: translateY(0);
+    filter: drop-shadow(0 0 8px #00b4d8);
+  }
+  50% {
+    transform: translateY(-10px);
+    filter: drop-shadow(0 0 18px #5D3FD3);
+  }
+}
+@keyframes electricPulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.3;
+  }
+}
+.logo-electric {
+  position: absolute;
+  right: 20px;
+  top: 30px;
+  width: 120px;
+  height: 120px;
+  z-index: 1;
+  animation: floatAndGlow 6s ease-in-out infinite;
+}
+
+.logo-electric img {
+  width: 100%;
+  height: auto;
+}
+
+/* Halo animé */
+.logo-electric::before {
+  content: "";
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 180, 216, 0.15) 0%, transparent 70%);
+  animation: electricPulse 2.5s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Mode sombre */
+.dark-mode .logo-electric::before {
+  background: radial-gradient(circle, rgba(123, 44, 191, 0.25) 0%, transparent 70%);
+}
+
+@media (max-width: 768px) {
+  .logo-electric {
+    position: relative;
+    top: 10px;
+    right: 0;
+    margin: 0 auto 1rem;
+    width: 100px;
+    height: 100px;
+    display: block;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .features-section {
+    grid-template-columns: 1fr;
+  }
+
+  .logo-electric::before {
+    width: 140px;
+    height: 140px;
+    top: -10px;
+    left: -10px;
+  }
+
+  .hero-section {
+    padding-top: 0;
+    max-width: 95%;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 800px) {
+  .features-section {
+    grid-template-columns: 1fr;
+     max-width: 95%;
+  }
+}
+@media (min-width: 993px) and (max-width: 1200px) {
+  .logo-electric {
+    top: 20px;
+    right: 10px;
+    width: 100px;
+    height: 100px;
+  }
+
+  .hero-section {
+    padding-top: 120px; /* Ajoute de l'espace sous le logo */
+  }
+}
+.cta-button {
+  background: var(--light);
+  color: var(--primary);
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 2rem auto; /* espace au-dessus et au-dessous */
+  max-width: 300px;  /* limite la largeur max */
+  width: 100%;       /* prend toute la largeur disponible */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Hover reste pareil */
+.cta-button:hover {
+  background: var(--text-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* Responsive : petits écrans */
+@media (max-width: 480px) {
+  .cta-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    max-width: 100%; /* occupe tout l’espace possible */
+    margin: 1.5rem auto;
+  }
+}
+@media (max-width: 768px) {
+  .features-section {
+    margin-bottom: 1.5rem !important; /* espace sous les cartes */
+  }
+
+  .cta-button {
+    margin-top: 2rem !important;       /* espace au-dessus du bouton */
+    width: 90%;                        /* largeur adaptée au mobile */
+    max-width: 320px;                  /* limite largeur max */
+  }
+}
+
