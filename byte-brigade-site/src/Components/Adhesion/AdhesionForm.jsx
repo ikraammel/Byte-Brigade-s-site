@@ -38,29 +38,29 @@ export default function AdhesionForm() {
   };
 
   const handleSubmit = async e => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!emailRegex.test(formData.email)) {
-      toast.error("Veuillez saisir un email valide.");
-      return;
-    }
+  if (!emailRegex.test(formData.email)) {
+    toast.error("Veuillez saisir un email valide.");
+    return;
+  }
 
-    try {
-      // Enregistrement dans Firestore
-      await addDoc(collection(db, "demandesAdhesion"), {
-        ...formData,
-        competences: formData.autreCompetence 
-          ? [...formData.competences.filter(c => c !== "Autres"), formData.autreCompetence]
-          : formData.competences,
-        timestamp: Timestamp.now()
-      });
-
-
-      const competencesFinales = formData.autreCompetence
+  try {
+    // 1️⃣ Enregistrement dans Firestore
+    await addDoc(collection(db, "demandesAdhesion"), {
+      ...formData,
+      competences: formData.autreCompetence 
         ? [...formData.competences.filter(c => c !== "Autres"), formData.autreCompetence]
-        : formData.competences;
+        : formData.competences,
+      timestamp: Timestamp.now()
+    });
 
-      // Envoi email au candidat
+    const competencesFinales = formData.autreCompetence
+      ? [...formData.competences.filter(c => c !== "Autres"), formData.autreCompetence]
+      : formData.competences;
+
+    // 2️⃣ Envoi email au candidat
+    try {
       await emailjs.send(
         'gmailService',
         'template_xmxlhkb',
@@ -72,8 +72,16 @@ export default function AdhesionForm() {
         },
         '5ClTGt_8TWjsxfOAJ'
       );
+    } catch (err) {
+      if (err.text?.includes("quota")) {
+        console.warn("Quota EmailJS atteint, email candidat non envoyé.");
+      } else {
+        console.error("Erreur EmailJS (candidat) :", err);
+      }
+    }
 
-      // Envoi email au club/admin
+    // 3️⃣ Envoi email au club/admin
+    try {
       await emailjs.send(
         'gmailService',
         'template_9ayzxha',
@@ -82,43 +90,52 @@ export default function AdhesionForm() {
           from_name: `${formData.prenom} ${formData.nom}`,
           to_email: "bytebrigadeclub@gmail.com",
           message: `
-                    Nouvelle demande d’adhésion reçue :
+            Nouvelle demande d’adhésion reçue :
 
-                    Nom : ${formData.nom}
-                    Prénom : ${formData.prenom}
-                    Email : ${formData.email}
-                    Téléphone : ${formData.tel}
-                    Motivation : ${formData.motivation}
-                    Sexe : ${formData.sexe}
-                    Niveau : ${formData.niveau}
-                    Passionné : ${formData.passionne}
-                    Compétences : ${competencesFinales.join(", ")}
-                    Commentaires : ${formData.commentaires}
+            Nom : ${formData.nom}
+            Prénom : ${formData.prenom}
+            Email : ${formData.email}
+            Téléphone : ${formData.tel}
+            Motivation : ${formData.motivation}
+            Sexe : ${formData.sexe}
+            Niveau : ${formData.niveau}
+            Passionné : ${formData.passionne}
+            Compétences : ${competencesFinales.join(", ")}
+            Commentaires : ${formData.commentaires}
           `,
         },
         '5ClTGt_8TWjsxfOAJ'
       );
-
-      toast.success("Demande enregistrée et email envoyé !");
-      setFormData({
-        nom: '',
-        prenom: '',
-        tel: '',
-        email: '',
-        motivation: '',
-        sexe: '',
-        niveau: '',
-        passionne: '',
-        competences: [],
-        autreCompetence: '', 
-        commentaires: ''
-      });
-
-    } catch (error) {
-      console.error("Erreur lors de l’enregistrement ou de l’envoi d’email :", error);
-      toast.error("Erreur lors de l'envoi. Veuillez réessayer.");
+    } catch (err) {
+      if (err.text?.includes("quota")) {
+        console.warn("Quota EmailJS atteint, email admin non envoyé.");
+      } else {
+        console.error("Erreur EmailJS (admin) :", err);
+      }
     }
-  };
+
+    toast.success("Demande enregistrée ! ");
+
+    setFormData({
+      nom: '',
+      prenom: '',
+      tel: '',
+      email: '',
+      motivation: '',
+      sexe: '',
+      niveau: '',
+      passionne: '',
+      competences: [],
+      autreCompetence: '', 
+      commentaires: ''
+    });
+
+  } catch (error) {
+    console.error("Erreur lors de l’enregistrement :", error);
+    toast.error("Erreur lors de l'enregistrement. Veuillez réessayer.");
+  }
+};
+
 
   return (
     <div id="formulaire-adhesion" className="container py-5">
