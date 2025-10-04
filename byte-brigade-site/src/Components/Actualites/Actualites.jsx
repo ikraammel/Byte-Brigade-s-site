@@ -25,7 +25,7 @@ function Actualites() {
       <div className="images-row">
         <div className="image-col">
           <img
-            src="public/capuche-recto.jpeg"
+            src="capuche-recto.jpeg"
             alt="Capuche Byte Brigade - Recto"
             className="product-image"
           />
@@ -35,7 +35,7 @@ function Actualites() {
         </div>
         <div className="image-col">
           <img
-            src="public/capuche-verso.jpeg"
+            src="capuche-verso.jpeg"
             alt="Capuche Byte Brigade - Verso"
             className="product-image"
           />
