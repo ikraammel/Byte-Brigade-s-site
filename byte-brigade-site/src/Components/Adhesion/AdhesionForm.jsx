@@ -43,6 +43,7 @@ export default function AdhesionForm() {
   if (!emailRegex.test(formData.email)) {
     toast.error("Veuillez saisir un email valide.");
     return;
+    
   }
 
   try {

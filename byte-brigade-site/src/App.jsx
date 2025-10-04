@@ -23,6 +23,8 @@
   import Footer from "./Components/Footer/Footer";
 import Activites from "./Components/Activites/Activites";
 import ConnectedUsers from "./Components/Dashboard/ConnectedUsers";
+import Actualites from "./Components/Actualites/Actualites";
+
 
   function AdhesionPage() {
     return <AdhesionForm />
@@ -71,6 +73,7 @@ import ConnectedUsers from "./Components/Dashboard/ConnectedUsers";
                   <Route path="/register" element={<Register />} />
                   <Route path="/membres" element={<Membres />} />
                   <Route path="/activites" element={<Activites />} />
+                  <Route path="/Actualites" element={<Actualites />} />
                   <Route
                     path="/dashboard"
                     element={

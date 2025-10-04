@@ -72,6 +72,9 @@ export default function Navbar() {
           <li className="nav-item">
             <Link className="nav-link" to="/membres" onClick={closeNavbar}>Nos membres</Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/Actualites" onClick={closeNavbar}>Actualités</Link>
+          </li>
 
           {/* Contenu conditionnel utilisateur */}
           {currentUser ? (
