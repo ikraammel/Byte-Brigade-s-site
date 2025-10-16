@@ -9,9 +9,16 @@ export const AuthProvider = ({ children }) => {
     });
     
     const [currentUser, setCurrentUser] = useState(() => {
-        const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
+  const storedUser = localStorage.getItem('user');
+  if (!storedUser || storedUser === "undefined") return null;
+  try {
+    return JSON.parse(storedUser);
+  } catch (e) {
+    console.error("Erreur parsing user depuis localStorage:", e);
+    return null;
+  }
+});
+
   
     useEffect(() => {
         if (currentUser) {
