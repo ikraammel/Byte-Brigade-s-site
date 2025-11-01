@@ -84,12 +84,11 @@ function Membres() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        key={annee} // permet de réanimer le container quand l'année change
       >
         <AnimatePresence>
           {membresData[annee].map((m) => (
             <motion.div
-              key={m.photo}
+              key={m.photo} // chaque carte a un key unique
               className="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center mb-4"
               variants={cardVariants}
               initial="hidden"
@@ -105,5 +104,6 @@ function Membres() {
     </div>
   );
 }
+
 
 export default Membres;
