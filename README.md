@@ -30,7 +30,3 @@ Install the dependencies for the relevant application components and configure a
 ## About this project
 
 Developed for the **Byte Brigade** computer science club.
-
-## Author
-
-[Ikram El Houl](https://github.com/ikraammel)
