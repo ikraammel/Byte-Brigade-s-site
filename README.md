@@ -1,23 +1,35 @@
-# Byte Brigade — Website
+# Byte Brigade — Computer Science Club Website
 
-Website project for the Byte Brigade team.
+A responsive website built for the Byte Brigade computer science club, featuring member and administrator access, learning resources, events, and multimedia content.
 
-## Overview
+## Key features
 
-This repository contains the source code for **Byte Brigade — Website**. It is part of my software development portfolio.
+- Secure sign-in with member and administrator roles
+- Access to courses and club events
+- Photo and video gallery
+- Administrative management features
+- Responsive interface with light and dark themes
+
+## Technology stack
+
+- React.js
+- Firebase
+- React-Bootstrap
+- PostgreSQL
 
 ## Getting started
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/ikraammel/Byte-Brigade-s-site.git
-   cd Byte-Brigade-s-site
-   ```
-2. Open the repository to explore the site source and assets.
+Clone the repository:
 
-## Project status
+```bash
+git clone https://github.com/ikraammel/Byte-Brigade-s-site.git
+cd Byte-Brigade-s-site
+```
+Install the dependencies for the relevant application components and configure any required environment variables or external services according to the project source.
 
-Portfolio / learning project. Refer to the source code for the currently implemented functionality.
+## About this project
+
+Developed for the **Byte Brigade** computer science club.
 
 ## Author
 
